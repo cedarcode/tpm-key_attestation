@@ -32,5 +32,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/tpm-key_attestation.
+Bug reports and pull requests are welcome on GitHub at https://github.com/cedarcode/tpm-key_attestation.
 

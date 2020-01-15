@@ -6,6 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = "tpm-key_attestation"
   spec.version       = TPM::KeyAttestation::VERSION
   spec.authors       = ["Gonzalo"]
+  spec.license = "Apache-2.0"
 
   spec.summary       = "TPM Key Attestation verifier"
   spec.homepage      = "https://github.com/cedarcode/tpm-key_attestation"

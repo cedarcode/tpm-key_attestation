@@ -22,7 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+  TPM::SAttest.dererialize(certify_info).valid?(certified_object, certified_extra_data_hash)
+  TPM::EKCertificate.from_der(certificate_der).conformant?
+```
 
 ## Development
 

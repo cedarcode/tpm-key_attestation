@@ -24,8 +24,14 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-  TPM::SAttest.dererialize(certify_info).valid?(certified_object, certified_extra_data_hash)
-  TPM::EKCertificate.from_der(certificate_der).conformant?
+TPM::KeyAttestation.new(
+  certify_info,
+  signature,
+  certified_object,
+  signing_key,
+  hash_function,
+  quilifying_data
+).valid?
 ```
 
 ## Development

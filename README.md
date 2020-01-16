@@ -1,8 +1,9 @@
-# TPM::KeyAttestation
+# tpm-key_attestation
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tpm/key_attestation`. To experiment with that code, run `bin/console` for an interactive prompt.
+TPM Key Attestation utitlies
 
-TODO: Delete this and the text above, and describe your gem
+[![Gem](https://img.shields.io/gem/v/tpm-key_attestation.svg?style=flat-square)](https://rubygems.org/gems/tpm-key_attestation)
+[![Travis](https://img.shields.io/travis/cedarcode/tpm-key_attestation.svg?style=flat-square)](https://travis-ci.org/cedarcode/tpm-key_attestation)
 
 ## Installation
 

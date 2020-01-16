@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "tpm/key_attestation/version"
+require "tpm/certify_validator"
 
 module TPM
   class KeyAttestation
@@ -19,21 +20,12 @@ module TPM
     end
 
     def valid?
-      valid_signature? && valid_certify_info?
-    end
-
-    private
-
-    def valid_signature?
-      signing_key.verify(hash_function, signature, certify_info)
-    end
-
-    def valid_certify_info?
-      s_attest.valid?(certified_object, qualifying_data)
-    end
-
-    def s_attest
-      @s_attest ||= ::TPM::SAttest.read(certify_info)
+      TPM::CertifyValidator.new(
+        certify_info,
+        signature,
+        qualifying_data,
+        certified_object
+      ).valid?(signing_key, hash_function)
     end
   end
 end

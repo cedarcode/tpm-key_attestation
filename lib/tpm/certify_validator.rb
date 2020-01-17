@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "tpm/constants"
-require "tpm/name"
+require "tpm/public_area"
 require "tpm/s_attest"
 
 module TPM
@@ -25,7 +25,7 @@ module TPM
       attest.attested_type == TPM::ST_ATTEST_CERTIFY &&
         attest.extra_data.buffer == nonce &&
         attest.magic == TPM::GENERATED_VALUE &&
-        TPM::Name.new(attest.attested.name.buffer).valid_for?(object)
+        attest.attested.name.buffer == TPM::PublicArea.new(object).name
     end
 
     def valid_signature?(signing_key, hash_function)

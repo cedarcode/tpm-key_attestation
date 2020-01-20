@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tpm-key_attestation (0.3.0)
+    tpm-key_attestation (0.4.0)
       bindata (~> 2.4)
 
 GEM

@@ -26,15 +26,20 @@ module TPM
     end
 
     def valid?
-      TPM::CertifyValidator.new(
-        certify_info,
-        signature,
-        qualifying_data,
-        certified_object
-      ).valid?(signing_key, hash_function)
+      certify_validator.valid?(signing_key, hash_function)
     end
 
     private
+
+    def certify_validator
+      @certify_validator ||=
+        TPM::CertifyValidator.new(
+          certify_info,
+          signature,
+          qualifying_data,
+          certified_object
+        )
+    end
 
     def public_area
       @public_area ||= TPM::PublicArea.new(certified_object)

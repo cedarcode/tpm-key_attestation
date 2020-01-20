@@ -30,13 +30,14 @@ RSpec.describe TPM::KeyAttestation do
     end
 
     let(:signature) do
-      attestation_key.sign(hash_function, certify_info)
+      attestation_key.sign(hash_function, to_be_signed)
     end
 
     let(:certify_info_magic) { TPM::GENERATED_VALUE }
     let(:certify_info_extra_data) { qualifying_data }
     let(:certify_info_attested_name) { [name_alg].pack("n") + OpenSSL::Digest::SHA1.digest(attested_object) }
     let(:name_alg) { TPM::ALG_SHA1 }
+    let(:to_be_signed) { certify_info }
 
     let(:attested_object) do
       t_public = TPM::TPublic.new
@@ -53,6 +54,40 @@ RSpec.describe TPM::KeyAttestation do
     context "when everything's in place" do
       it "returns true" do
         expect(key_attestation).to be_valid
+      end
+    end
+
+    context "when signature is invalid" do
+      context "because is signed with a different hash function" do
+        let(:signature) { attestation_key.sign("SHA1", to_be_signed) }
+
+        it "returns false" do
+          expect(key_attestation).not_to be_valid
+        end
+      end
+
+      context "because it was signed with an incorrect key" do
+        let(:signature) { OpenSSL::PKey::RSA.new(2048).sign(hash_function, to_be_signed) }
+
+        it "returns false" do
+          expect(key_attestation).not_to be_valid
+        end
+      end
+
+      context "because it was signed over different data" do
+        let(:to_be_signed) { "other data".b }
+
+        it "returns false" do
+          expect(key_attestation).not_to be_valid
+        end
+      end
+
+      context "because it is nonsense" do
+        let(:signature) { "corrupted signature".b }
+
+        it "returns false" do
+          expect(key_attestation).not_to be_valid
+        end
       end
     end
 

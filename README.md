@@ -30,8 +30,8 @@ key_attestation =
     signature,
     certified_object,
     signing_key,
-    hash_function,
-    quilifying_data
+    quilifying_data,
+    algorithm: "RS256" # Supported values: "RS256", "PS256", "ES256" (default "RS256")
   )
 
 if key_attestation.valid?

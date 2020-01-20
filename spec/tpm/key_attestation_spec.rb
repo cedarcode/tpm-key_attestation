@@ -14,8 +14,8 @@ RSpec.describe TPM::KeyAttestation do
         signature,
         attested_object,
         attestation_key,
-        hash_function,
-        qualifying_data
+        qualifying_data,
+        algorithm: algorithm
       )
     end
 
@@ -29,9 +29,8 @@ RSpec.describe TPM::KeyAttestation do
       s_attest.to_binary_s
     end
 
-    let(:signature) do
-      attestation_key.sign(hash_function, to_be_signed)
-    end
+    let(:algorithm) { "RS256" }
+    let(:signature) { attestation_key.sign(hash_function, to_be_signed) }
 
     let(:certify_info_magic) { TPM::GENERATED_VALUE }
     let(:certify_info_extra_data) { qualifying_data }
@@ -52,6 +51,23 @@ RSpec.describe TPM::KeyAttestation do
     let(:attestation_key) { OpenSSL::PKey::RSA.new(2048) }
 
     context "when everything's in place" do
+      it "returns true" do
+        expect(key_attestation).to be_valid
+      end
+    end
+
+    context "when RSA PSS algorithm" do
+      before do
+        unless OpenSSL::PKey::RSA.instance_methods.include?(:verify_pss)
+          skip "Ruby OpenSSL gem #{OpenSSL::VERSION} do not support RSASSA-PSS"
+        end
+      end
+
+      let(:algorithm) { "PS256" }
+      let(:signature) do
+        attestation_key.sign_pss(hash_function, to_be_signed, salt_length: :max, mgf1_hash: hash_function)
+      end
+
       it "returns true" do
         expect(key_attestation).to be_valid
       end

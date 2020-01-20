@@ -6,17 +6,18 @@ require "tpm/s_attest"
 
 module TPM
   class CertifyValidator
-    attr_reader :info, :signature, :nonce, :object
+    attr_reader :info, :signature, :nonce, :object, :algorithm
 
-    def initialize(info, signature, nonce, object)
+    def initialize(info, signature, nonce, object, algorithm: "RS256")
       @info = info
       @signature = signature
       @nonce = nonce
       @object = object
+      @algorithm = algorithm
     end
 
-    def valid?(signing_key, hash_function)
-      valid_info? && valid_signature?(signing_key, hash_function)
+    def valid?(signing_key)
+      valid_info? && valid_signature?(signing_key)
     end
 
     private
@@ -28,12 +29,24 @@ module TPM
         attest.attested.name.buffer == TPM::PublicArea.new(object).name
     end
 
-    def valid_signature?(signing_key, hash_function)
-      signing_key.verify(hash_function, signature, info)
+    def valid_signature?(signing_key)
+      if rsa_pss?
+        signing_key.verify_pss(hash_function, signature, info, salt_length: :auto, mgf1_hash: hash_function)
+      else
+        signing_key.verify(hash_function, signature, info)
+      end
     end
 
     def attest
       @attest ||= TPM::SAttest.deserialize(info)
+    end
+
+    def hash_function
+      "SHA#{algorithm[2..-1]}"
+    end
+
+    def rsa_pss?
+      algorithm.start_with?("PS")
     end
   end
 end

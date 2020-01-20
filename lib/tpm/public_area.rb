@@ -20,6 +20,10 @@ module TPM
       [name_alg].pack("n") + name_digest
     end
 
+    def key
+      t_public.key
+    end
+
     private
 
     def name_digest

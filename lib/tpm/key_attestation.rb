@@ -19,6 +19,12 @@ module TPM
       @qualifying_data = qualifying_data
     end
 
+    def key
+      if valid?
+        public_area.key
+      end
+    end
+
     def valid?
       TPM::CertifyValidator.new(
         certify_info,
@@ -26,6 +32,12 @@ module TPM
         qualifying_data,
         certified_object
       ).valid?(signing_key, hash_function)
+    end
+
+    private
+
+    def public_area
+      @public_area ||= TPM::PublicArea.new(certified_object)
     end
   end
 end

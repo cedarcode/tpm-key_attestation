@@ -24,14 +24,19 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-TPM::KeyAttestation.new(
-  certify_info,
-  signature,
-  certified_object,
-  signing_key,
-  hash_function,
-  quilifying_data
-).valid?
+key_attestation =
+  TPM::KeyAttestation.new(
+    certify_info,
+    signature,
+    certified_object,
+    signing_key,
+    hash_function,
+    quilifying_data
+  )
+
+if key_attestation.valid?
+  key_attestation.key
+end
 ```
 
 ## Development

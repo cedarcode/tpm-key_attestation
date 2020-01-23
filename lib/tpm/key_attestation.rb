@@ -20,13 +20,13 @@ module TPM
     end
 
     def key
-      if valid?
+      if certify_validator.valid?(signing_key)
         public_area.key
       end
     end
 
     def valid?
-      certify_validator.valid?(signing_key)
+      !!key
     end
 
     private

@@ -42,6 +42,11 @@ RSpec.describe TPM::KeyAttestation do
       t_public = TPM::TPublic.new
       t_public.alg_type = TPM::ALG_RSA
       t_public.name_alg = name_alg
+      t_public.parameters.symmetric = TPM::ALG_NULL
+      t_public.parameters.scheme = TPM::ALG_RSASSA
+      t_public.parameters.key_bits = 1024
+      t_public.parameters.exponent = 0x00
+      t_public.unique.buffer = OpenSSL::PKey::RSA.new(1024).params["n"].to_s(2)
 
       t_public.to_binary_s
     end

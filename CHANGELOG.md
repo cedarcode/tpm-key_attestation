@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.5.0] - 2020-01-23
+
+### Added
+
+- `TPM::KeyAttestation#valid?` also checks there's at least a well-formatted key in the attestation
+
 ## [v0.4.0] - 2020-01-20
 
 ### Added
@@ -25,6 +31,7 @@
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.5.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.4.0...v0.5.0/
 [v0.4.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.3.0...v0.4.0/
 [v0.3.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.2.0...v0.3.0/
 [v0.2.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.1.0...v0.2.0/

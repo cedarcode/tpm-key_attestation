@@ -37,7 +37,7 @@ module TPM
     end
 
     def key
-      if parameters.symmetric == ::TPM::ALG_NULL
+      if parameters.symmetric == TPM::ALG_NULL
         case alg_type
         when TPM::ALG_ECC
           ecc_key

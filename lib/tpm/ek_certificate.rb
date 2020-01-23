@@ -72,7 +72,7 @@ module TPM
       model = name.assoc(OID_TCG_AT_TPM_MODEL).at(1)
       version = name.assoc(OID_TCG_AT_TPM_VERSION).at(1)
 
-      ::TPM::VENDOR_IDS[manufacturer] &&
+      TPM::VENDOR_IDS[manufacturer] &&
         !model.empty? &&
         !version.empty? &&
         (empty_subject? && extension.critical? || !empty_subject? && !extension.critical?)

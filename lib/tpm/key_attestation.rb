@@ -2,20 +2,38 @@
 
 require "tpm/key_attestation/version"
 require "tpm/certify_validator"
+require "tpm/constants"
 
 module TPM
   class KeyAttestation
     class Error < StandardError; end
 
-    attr_reader :certify_info, :signature, :certified_object, :signing_key, :algorithm, :qualifying_data
+    attr_reader(
+      :certify_info,
+      :signature,
+      :certified_object,
+      :signing_key,
+      :signature_algorithm,
+      :hash_algorithm,
+      :qualifying_data
+    )
 
-    def initialize(certify_info, signature, certified_object, signing_key, qualifying_data, algorithm: "RS256")
+    def initialize(
+      certify_info,
+      signature,
+      certified_object,
+      signing_key,
+      qualifying_data,
+      signature_algorithm: ALG_RSASSA,
+      hash_algorithm: ALG_SHA256
+    )
       @certify_info = certify_info
       @signature = signature
 
       @certified_object = certified_object
       @signing_key = signing_key
-      @algorithm = algorithm
+      @signature_algorithm = signature_algorithm
+      @hash_algorithm = hash_algorithm
       @qualifying_data = qualifying_data
     end
 
@@ -38,7 +56,8 @@ module TPM
           signature,
           qualifying_data,
           certified_object,
-          algorithm: algorithm
+          signature_algorithm: signature_algorithm,
+          hash_algorithm: hash_algorithm
         )
     end
 

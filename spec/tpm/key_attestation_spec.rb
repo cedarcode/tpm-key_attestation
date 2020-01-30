@@ -15,7 +15,8 @@ RSpec.describe TPM::KeyAttestation do
         attested_object,
         attestation_key,
         qualifying_data,
-        algorithm: algorithm
+        signature_algorithm: signature_algorithm,
+        hash_algorithm: hash_algorithm
       )
     end
 
@@ -29,7 +30,8 @@ RSpec.describe TPM::KeyAttestation do
       s_attest.to_binary_s
     end
 
-    let(:algorithm) { "RS256" }
+    let(:signature_algorithm) { TPM::ALG_RSASSA }
+    let(:hash_algorithm) { TPM::ALG_SHA256 }
     let(:signature) { attestation_key.sign(hash_function, to_be_signed) }
 
     let(:certify_info_magic) { TPM::GENERATED_VALUE }
@@ -68,7 +70,7 @@ RSpec.describe TPM::KeyAttestation do
         end
       end
 
-      let(:algorithm) { "PS256" }
+      let(:signature_algorithm) { TPM::ALG_RSAPSS }
       let(:signature) do
         attestation_key.sign_pss(hash_function, to_be_signed, salt_length: :max, mgf1_hash: hash_function)
       end

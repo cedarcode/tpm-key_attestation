@@ -31,7 +31,7 @@ key_attestation =
     certified_object,
     signing_key,
     quilifying_data,
-    algorithm: "RS256" # Supported values: "RS256", "PS256", "ES256" (default "RS256")
+    signature_algorithm: TPM::ALG_RSAPSS # Supported values: TPM::ALG_RSAPSS, TPM::ALG_RSASSA, TPM::ALG_ECDSA (default TPM::ALG_RSASSA)
   )
 
 if key_attestation.valid?

@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.6.0] - 2020-01-30
+
+### Changed
+
+- `TPM::KeyAttestation.new` now accepts `signature_algorithm` and `hash_algorithm` in TPM format in
+replacement of `JOSE` format `algorithm` string
+
 ## [v0.5.0] - 2020-01-23
 
 ### Added
@@ -31,6 +38,7 @@
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.6.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.5.0...v0.6.0/
 [v0.5.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.4.0...v0.5.0/
 [v0.4.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.3.0...v0.4.0/
 [v0.3.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.2.0...v0.3.0/

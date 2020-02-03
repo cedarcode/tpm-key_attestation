@@ -2,7 +2,6 @@
 
 require "openssl/signature_algorithm"
 require "tpm/constants"
-require "tpm/public_area"
 require "tpm/s_attest"
 
 module TPM
@@ -39,7 +38,7 @@ module TPM
       attest.attested_type == TPM::ST_ATTEST_CERTIFY &&
         attest.extra_data.buffer == nonce &&
         attest.magic == TPM::GENERATED_VALUE &&
-        attest.attested.name.buffer == TPM::PublicArea.new(object).name
+        attest.attested.name.valid_for?(object)
     end
 
     def valid_signature?(verify_key)

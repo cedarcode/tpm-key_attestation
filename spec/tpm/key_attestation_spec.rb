@@ -25,7 +25,8 @@ RSpec.describe TPM::KeyAttestation do
       s_attest.magic = certify_info_magic
       s_attest.attested_type = TPM::ST_ATTEST_CERTIFY
       s_attest.extra_data.buffer = certify_info_extra_data
-      s_attest.attested.name.buffer = certify_info_attested_name
+      s_attest.attested.name.name.hash_alg = name_alg
+      s_attest.attested.name.name.digest = certify_info_attested_name_digest
 
       s_attest.to_binary_s
     end
@@ -36,7 +37,7 @@ RSpec.describe TPM::KeyAttestation do
 
     let(:certify_info_magic) { TPM::GENERATED_VALUE }
     let(:certify_info_extra_data) { qualifying_data }
-    let(:certify_info_attested_name) { [name_alg].pack("n") + OpenSSL::Digest::SHA1.digest(attested_object) }
+    let(:certify_info_attested_name_digest) { OpenSSL::Digest::SHA1.digest(attested_object) }
     let(:name_alg) { TPM::ALG_SHA1 }
     let(:to_be_signed) { certify_info }
 
@@ -133,8 +134,8 @@ RSpec.describe TPM::KeyAttestation do
 
       context "because attested name is not a valid name for attested object" do
         context "because it was hashed on different data" do
-          let(:certify_info_attested_name) do
-            [TPM::ALG_SHA1].pack("n") + OpenSSL::Digest::SHA1.digest(attested_object + "X")
+          let(:certify_info_attested_name_digest) do
+            OpenSSL::Digest::SHA1.digest(attested_object + "X")
           end
 
           it "returns false" do
@@ -143,8 +144,8 @@ RSpec.describe TPM::KeyAttestation do
         end
 
         context "because it was hashed with a different algorithm" do
-          let(:certify_info_attested_name) do
-            [TPM::ALG_SHA1].pack("n") + OpenSSL::Digest::SHA256.digest(attested_object)
+          let(:certify_info_attested_name_digest) do
+            OpenSSL::Digest::SHA256.digest(attested_object)
           end
 
           it "returns false" do

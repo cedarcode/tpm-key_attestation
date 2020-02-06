@@ -3,6 +3,10 @@ dist: bionic
 language: ruby
 cache: bundler
 
+env:
+  - LIBSSL_V=1.0
+  - LIBSSL_V=
+
 rvm:
   - ruby-head
   - 2.7.0
@@ -22,6 +26,9 @@ matrix:
     - rvm: ruby-head
     - gemfile: gemfiles/openssl_head.gemfile
 
-before_install:
+install:
+  - sudo apt install libssl${LIBSSL_V}-dev
+  - rvm reinstall $TRAVIS_RUBY_VERSION --autolibs=disable
   - gem install bundler -v "~> 2.0"
   - rm Gemfile.lock
+  - bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}

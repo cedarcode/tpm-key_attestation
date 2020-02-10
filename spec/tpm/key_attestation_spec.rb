@@ -56,7 +56,7 @@ RSpec.describe TPM::KeyAttestation do
 
     let(:hash_function) { "SHA256" }
     let(:qualifying_data) { OpenSSL::Digest::SHA256.digest("qualifying-data") }
-    let(:attestation_key) { OpenSSL::PKey::RSA.new(2048) }
+    let(:attestation_key) { create_rsa_key }
 
     context "when everything's in place" do
       it "returns true" do
@@ -91,7 +91,7 @@ RSpec.describe TPM::KeyAttestation do
       end
 
       context "because it was signed with an incorrect key" do
-        let(:signature) { OpenSSL::PKey::RSA.new(2048).sign(hash_function, to_be_signed) }
+        let(:signature) { create_rsa_key.sign(hash_function, to_be_signed) }
 
         it "returns false" do
           expect(key_attestation).not_to be_valid

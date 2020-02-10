@@ -15,3 +15,9 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+def create_rsa_key
+  key_bits = 1024 # NOTE: Use 2048 or more in real life. This choice is just for fast test runs.
+
+  OpenSSL::PKey::RSA.new(key_bits)
+end

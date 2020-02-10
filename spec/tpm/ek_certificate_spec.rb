@@ -29,7 +29,7 @@ RSpec.describe "TPM::EKCertificate" do
       certificate
     end
 
-    let(:key) { OpenSSL::PKey::RSA.new(2048) }
+    let(:key) { create_rsa_key }
 
     let(:certificate_version) { 2 }
     let(:certificate_subject) { "" }

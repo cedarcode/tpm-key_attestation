@@ -10,10 +10,11 @@ module TPM
     ASN_V3 = 2
     EMPTY_NAME = OpenSSL::X509::Name.new([]).freeze
     SAN_DIRECTORY_NAME = 4
-    OID_TCG_AT_TPM_MANUFACTURER = "2.23.133.2.1"
-    OID_TCG_AT_TPM_MODEL = "2.23.133.2.2"
-    OID_TCG_AT_TPM_VERSION = "2.23.133.2.3"
-    OID_TCG_KP_AIK_CERTIFICATE = "2.23.133.8.3"
+    OID_TCG = "2.23.133"
+    OID_TCG_AT_TPM_MANUFACTURER = "#{OID_TCG}.2.1"
+    OID_TCG_AT_TPM_MODEL = "#{OID_TCG}.2.2"
+    OID_TCG_AT_TPM_VERSION = "#{OID_TCG}.2.3"
+    OID_TCG_KP_AIK_CERTIFICATE = "#{OID_TCG}.8.3"
 
     def self.from_der(certificate_der)
       new(OpenSSL::X509::Certificate.new(certificate_der))

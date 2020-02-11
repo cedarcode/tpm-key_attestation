@@ -6,7 +6,7 @@ require "tpm/constants"
 
 module TPM
   # Section 3.2 in https://www.trustedcomputinggroup.org/wp-content/uploads/Credential_Profile_EK_V2.0_R14_published.pdf
-  class EKCertificate < SimpleDelegator
+  class AIKCertificate < SimpleDelegator
     ASN_V3 = 2
     EMPTY_NAME = OpenSSL::X509::Name.new([]).freeze
     SAN_DIRECTORY_NAME = 4

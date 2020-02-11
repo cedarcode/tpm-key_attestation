@@ -3,9 +3,9 @@
 require "spec_helper"
 
 require "openssl"
-require "tpm/ek_certificate"
+require "tpm/aik_certificate"
 
-RSpec.describe "TPM::EKCertificate" do
+RSpec.describe "TPM::AIKCertificate" do
   context "#conformant?" do
     let(:certificate) do
       certificate = OpenSSL::X509::Certificate.new
@@ -69,17 +69,17 @@ RSpec.describe "TPM::EKCertificate" do
       OPENSSL_CONF
     end
 
-    let(:ek_certificate) { TPM::EKCertificate.new(certificate) }
+    let(:aik_certificate) { TPM::AIKCertificate.new(certificate) }
 
     it "returns true if everything's in place" do
-      expect(ek_certificate).to be_conformant
+      expect(aik_certificate).to be_conformant
     end
 
     context "when version is incorrect" do
       let(:certificate_version) { 3 }
 
       it "returns false" do
-        expect(ek_certificate).not_to be_conformant
+        expect(aik_certificate).not_to be_conformant
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe "TPM::EKCertificate" do
       let(:certificate_extended_key_usage) { "2.23.133.8.4" }
 
       it "returns false" do
-        expect(ek_certificate).not_to be_conformant
+        expect(aik_certificate).not_to be_conformant
       end
     end
 
@@ -95,7 +95,7 @@ RSpec.describe "TPM::EKCertificate" do
       let(:certificate_basic_constraints) { "CA:TRUE" }
 
       it "returns false" do
-        expect(ek_certificate).not_to be_conformant
+        expect(aik_certificate).not_to be_conformant
       end
     end
 
@@ -103,7 +103,7 @@ RSpec.describe "TPM::EKCertificate" do
       let(:certificate_start_time) { Time.now + 30 }
 
       it "returns false" do
-        expect(ek_certificate).not_to be_conformant
+        expect(aik_certificate).not_to be_conformant
       end
     end
 
@@ -111,7 +111,7 @@ RSpec.describe "TPM::EKCertificate" do
       let(:certificate_end_time) { Time.now }
 
       it "returns false" do
-        expect(ek_certificate).not_to be_conformant
+        expect(aik_certificate).not_to be_conformant
       end
     end
 
@@ -121,7 +121,7 @@ RSpec.describe "TPM::EKCertificate" do
         let(:certificate_subject) { "" }
 
         it "returns false" do
-          expect(ek_certificate).not_to be_conformant
+          expect(aik_certificate).not_to be_conformant
         end
       end
 
@@ -130,7 +130,7 @@ RSpec.describe "TPM::EKCertificate" do
         let(:certificate_subject) { "/CN=CN" }
 
         it "returns false" do
-          expect(ek_certificate).not_to be_conformant
+          expect(aik_certificate).not_to be_conformant
         end
       end
 
@@ -138,7 +138,7 @@ RSpec.describe "TPM::EKCertificate" do
         let(:certificate_san_manufacturer) { "id:F0000000" }
 
         it "returns false" do
-          expect(ek_certificate).not_to be_conformant
+          expect(aik_certificate).not_to be_conformant
         end
       end
 
@@ -146,7 +146,7 @@ RSpec.describe "TPM::EKCertificate" do
         let(:certificate_san_model) { "" }
 
         it "returns false" do
-          expect(ek_certificate).not_to be_conformant
+          expect(aik_certificate).not_to be_conformant
         end
       end
 
@@ -154,7 +154,7 @@ RSpec.describe "TPM::EKCertificate" do
         let(:certificate_san_version) { "" }
 
         it "returns false" do
-          expect(ek_certificate).not_to be_conformant
+          expect(aik_certificate).not_to be_conformant
         end
       end
     end

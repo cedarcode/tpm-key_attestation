@@ -25,11 +25,8 @@ module TPM
         valid_version? &&
         valid_extended_key_usage? &&
         valid_basic_constraints? &&
+        empty_subject? &&
         valid_subject_alternative_name?
-    end
-
-    def empty_subject?
-      subject.eql?(EMPTY_NAME)
     end
 
     private
@@ -56,13 +53,17 @@ module TPM
       extended_key_usage && extended_key_usage.value == OID_TCG_KP_AIK_CERTIFICATE && !extended_key_usage.critical?
     end
 
+    def empty_subject?
+      subject.eql?(EMPTY_NAME)
+    end
+
     def valid_subject_alternative_name?
       if san_extension
-        !tpm_manufacturer.empty? &&
+        san_extension.critical? &&
+          !tpm_manufacturer.empty? &&
           TPM::VENDOR_IDS[tpm_manufacturer] &&
           !tpm_model.empty? &&
-          !tpm_version.empty? &&
-          (empty_subject? && san_extension.critical? || !empty_subject? && !san_extension.critical?)
+          !tpm_version.empty?
       end
     end
 

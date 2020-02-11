@@ -115,19 +115,17 @@ RSpec.describe "TPM::AIKCertificate" do
       end
     end
 
-    context "when the subject alternative name is invalid" do
-      context "because the extension is not critical when the subject is empty" do
-        let(:certificate_san_critical) { false }
-        let(:certificate_subject) { "" }
+    context "because subject is not empty" do
+      let(:certificate_subject) { "/CN=CN" }
 
-        it "returns false" do
-          expect(aik_certificate).not_to be_conformant
-        end
+      it "returns false" do
+        expect(aik_certificate).not_to be_conformant
       end
+    end
 
-      context "because the extension is critical when the subject is not empty" do
-        let(:certificate_san_critical) { true }
-        let(:certificate_subject) { "/CN=CN" }
+    context "when the subject alternative name is invalid" do
+      context "because the extension is not critical" do
+        let(:certificate_san_critical) { false }
 
         it "returns false" do
           expect(aik_certificate).not_to be_conformant

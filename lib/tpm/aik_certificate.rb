@@ -56,30 +56,55 @@ module TPM
     end
 
     def valid_subject_alternative_name?
-      extension = extensions.detect { |ext| ext.oid == "subjectAltName" }
-      return unless extension
-
-      san_asn1 =
-        OpenSSL::ASN1.decode(extension).find do |val|
-          val.tag_class == :UNIVERSAL && val.tag == OpenSSL::ASN1::OCTET_STRING
-        end
-      directory_name =
-        OpenSSL::ASN1.decode(san_asn1.value).find do |val|
-          val.tag_class == :CONTEXT_SPECIFIC && val.tag == SAN_DIRECTORY_NAME
-        end
-      name = OpenSSL::X509::Name.new(directory_name.value.first).to_a
-      manufacturer = name.assoc(OID_TCG_AT_TPM_MANUFACTURER).at(1)
-      model = name.assoc(OID_TCG_AT_TPM_MODEL).at(1)
-      version = name.assoc(OID_TCG_AT_TPM_VERSION).at(1)
-
-      TPM::VENDOR_IDS[manufacturer] &&
-        !model.empty? &&
-        !version.empty? &&
-        (empty_subject? && extension.critical? || !empty_subject? && !extension.critical?)
+      if san_extension
+        !tpm_manufacturer.empty? &&
+          TPM::VENDOR_IDS[tpm_manufacturer] &&
+          !tpm_model.empty? &&
+          !tpm_version.empty? &&
+          (empty_subject? && san_extension.critical? || !empty_subject? && !san_extension.critical?)
+      end
     end
 
     def extension(oid)
       extensions.detect { |ext| ext.oid == oid }
+    end
+
+    def tpm_manufacturer
+      if san_name
+        san_name.assoc(OID_TCG_AT_TPM_MANUFACTURER).at(1)
+      end
+    end
+
+    def tpm_model
+      if san_name
+        san_name.assoc(OID_TCG_AT_TPM_MODEL).at(1)
+      end
+    end
+
+    def tpm_version
+      if san_name
+        san_name.assoc(OID_TCG_AT_TPM_VERSION).at(1)
+      end
+    end
+
+    def san_name
+      if san_extension
+        san_asn1 =
+          OpenSSL::ASN1.decode(san_extension).find do |val|
+            val.tag_class == :UNIVERSAL && val.tag == OpenSSL::ASN1::OCTET_STRING
+          end
+
+        directory_name =
+          OpenSSL::ASN1.decode(san_asn1.value).find do |val|
+            val.tag_class == :CONTEXT_SPECIFIC && val.tag == SAN_DIRECTORY_NAME
+          end
+
+        OpenSSL::X509::Name.new(directory_name.value.first).to_a
+      end
+    end
+
+    def san_extension
+      extension("subjectAltName")
     end
   end
 end

@@ -11,7 +11,7 @@ module TPM
     attr_reader(
       :certify_info,
       :signature,
-      :certified_object,
+      :certified_key,
       :signing_key,
       :signature_algorithm,
       :hash_algorithm,
@@ -21,7 +21,7 @@ module TPM
     def initialize(
       certify_info,
       signature,
-      certified_object,
+      certified_key,
       signing_key,
       qualifying_data,
       signature_algorithm: ALG_RSASSA,
@@ -30,7 +30,7 @@ module TPM
       @certify_info = certify_info
       @signature = signature
 
-      @certified_object = certified_object
+      @certified_key = certified_key
       @signing_key = signing_key
       @signature_algorithm = signature_algorithm
       @hash_algorithm = hash_algorithm
@@ -55,14 +55,14 @@ module TPM
           certify_info,
           signature,
           qualifying_data,
-          certified_object,
+          certified_key,
           signature_algorithm: signature_algorithm,
           hash_algorithm: hash_algorithm
         )
     end
 
     def public_area
-      @public_area ||= TPM::PublicArea.new(certified_object)
+      @public_area ||= TPM::PublicArea.new(certified_key)
     end
   end
 end

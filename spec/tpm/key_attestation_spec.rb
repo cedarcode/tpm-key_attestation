@@ -13,12 +13,24 @@ RSpec.describe TPM::KeyAttestation do
         certify_info,
         signature,
         attested_object,
-        attestation_key,
+        certificates,
         qualifying_data,
         signature_algorithm: signature_algorithm,
-        hash_algorithm: hash_algorithm
+        hash_algorithm: hash_algorithm,
+        root_certificates: root_certificates
       )
     end
+
+    let(:certificates) { [certificate.to_der] }
+
+    let(:certificate) do
+      create_certificate(attestation_key, root_certificate, root_key)
+    end
+
+    let(:root_certificates) { [root_certificate] }
+
+    let(:root_certificate) { create_root_certificate(root_key) }
+    let(:root_key) { create_rsa_key }
 
     let(:certify_info) do
       s_attest = TPM::SAttest.new

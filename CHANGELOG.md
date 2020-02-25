@@ -1,5 +1,16 @@
 # Changelog
 
+## [v0.7.0] - 2020-02-25
+
+### Added
+
+- `TPM::KeyAttestation#valid?` performs certificate path validation. In other words, it verifies trust up
+to an acceptable trusted root certificate.
+
+### Changed
+
+- Rename `TPM::EKCertificate` to `TPM::AIKCertificate` to fix semantics
+
 ## [v0.6.0] - 2020-01-30
 
 ### Changed
@@ -38,6 +49,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.7.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.6.0...v0.7.0/
 [v0.6.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.5.0...v0.6.0/
 [v0.5.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.4.0...v0.5.0/
 [v0.4.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.3.0...v0.4.0/

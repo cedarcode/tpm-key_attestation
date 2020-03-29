@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.8.0] - 2020-03-29
+
+### Changed
+
+- Update `openssl-signature_algorithm` gem dependency from `v0.3` to `v0.4`.
+
 ## [v0.7.0] - 2020-02-25
 
 ### Added
@@ -49,6 +55,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.8.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.7.0...v0.8.0/
 [v0.7.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.6.0...v0.7.0/
 [v0.6.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.5.0...v0.6.0/
 [v0.5.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.4.0...v0.5.0/

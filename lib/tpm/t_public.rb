@@ -11,6 +11,7 @@ module TPM
   class TPublic < BinData::Record
     BYTE_LENGTH = 8
     CURVE_TPM_TO_OPENSSL = { TPM::ECC_NIST_P256 => "prime256v1" }.freeze
+    RSA_KEY_DEFAULT_PUBLIC_EXPONENT = 2**16 + 1
 
     class << self
       alias_method :deserialize, :read
@@ -74,7 +75,7 @@ module TPM
 
         if parameters.key_bits / BYTE_LENGTH == n.size
           key = OpenSSL::PKey::RSA.new(parameters.key_bits.value)
-          key.set_key(bn(n), nil, nil)
+          key.set_key(bn(n), bn(RSA_KEY_DEFAULT_PUBLIC_EXPONENT), nil)
 
           key.public_key
         end

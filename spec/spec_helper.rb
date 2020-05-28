@@ -28,7 +28,7 @@ def create_certificate(key, root_certificate, root_key)
   certificate.subject = OpenSSL::X509::Name.parse("")
   certificate.issuer = root_certificate.subject
   certificate.not_before = Time.now
-  certificate.not_after = Time.now + 60
+  certificate.not_after = Time.now + 120
   certificate.public_key = key
 
   certificate_basic_constraints = "CA:FALSE"

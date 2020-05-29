@@ -33,7 +33,7 @@ RSpec.describe "TPM::AIKCertificate" do
 
     let(:certificate_version) { 2 }
     let(:certificate_subject) { "" }
-    let(:certificate_start_time) { Time.now }
+    let(:certificate_start_time) { Time.now - 1 }
     let(:certificate_end_time) { certificate_start_time + 60 }
     let(:certificate_basic_constraints) { "CA:FALSE" }
     let(:certificate_extended_key_usage) { "2.23.133.8.3" }

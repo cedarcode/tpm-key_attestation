@@ -1,7 +1,11 @@
 ---
 dist: bionic
 language: ruby
-cache: bundler
+
+cache:
+  bundler: true
+  directories:
+    - /home/travis/.rvm/
 
 env:
   - RB=2.7.1 LIBSSL=1.0

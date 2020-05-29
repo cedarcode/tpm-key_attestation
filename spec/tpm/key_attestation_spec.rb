@@ -78,6 +78,22 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
+    context "when using the default root certificates" do
+      let(:root_certificates) { TPM::KeyAttestation::ROOT_CERTIFICATES }
+
+      let(:root_certificate) do
+        root_certificate = TPM::KeyAttestation::ROOT_CERTIFICATES.last
+        root_certificate.public_key = root_key
+        root_certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
+
+        root_certificate
+      end
+
+      it "returns true" do
+        expect(key_attestation).to be_valid
+      end
+    end
+
     context "when RSA PSS algorithm" do
       before do
         unless OpenSSL::PKey::RSA.instance_methods.include?(:verify_pss)

@@ -27,7 +27,7 @@ def create_certificate(key, root_certificate, root_key)
   certificate.version = 2
   certificate.subject = OpenSSL::X509::Name.parse("")
   certificate.issuer = root_certificate.subject
-  certificate.not_before = Time.now
+  certificate.not_before = Time.now - 1
   certificate.not_after = Time.now + 60
   certificate.public_key = key
 
@@ -82,7 +82,7 @@ def create_root_certificate(key)
   certificate.subject = OpenSSL::X509::Name.new([["CN", common_name]])
   certificate.issuer = certificate.subject
   certificate.public_key = key
-  certificate.not_before = Time.now
+  certificate.not_before = Time.now - 1
   certificate.not_after = Time.now + 60
 
   extension_factory = OpenSSL::X509::ExtensionFactory.new

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.9.0] - 2020-05-31
+
+### Fixed
+
+- Fixed compatibility with OpenSSL-C (libssl) v1.0.2 ([@santiagorodriguez96])
+
 ## [v0.8.0] - 2020-03-29
 
 ### Changed
@@ -55,6 +61,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.9.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.8.0...v0.9.0/
 [v0.8.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.7.0...v0.8.0/
 [v0.7.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.6.0...v0.7.0/
 [v0.6.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.5.0...v0.6.0/
@@ -63,3 +70,5 @@ replacement of `JOSE` format `algorithm` string
 [v0.3.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.2.0...v0.3.0/
 [v0.2.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.1.0...v0.2.0/
 [v0.1.0]: https://github.com/cedarcode/tpm-key_attestation/compare/57c926ef7e83830cee8d111fdc5ccaf99ab2e861...v0.1.0/
+
+[@santiagorodriguez96]: https://github.com/santiagorodriguez96

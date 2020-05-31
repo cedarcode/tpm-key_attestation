@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tpm-key_attestation (0.8.0)
+    tpm-key_attestation (0.9.0)
       bindata (~> 2.4)
       openssl-signature_algorithm (~> 0.4.0)
 

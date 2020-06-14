@@ -24,6 +24,14 @@ module TPM
       t_public.key
     end
 
+    def ecc?
+      t_public.ecc?
+    end
+
+    def openssl_curve_name
+      t_public.openssl_curve_name
+    end
+
     private
 
     def name_digest

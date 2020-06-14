@@ -43,12 +43,19 @@ module TPM
       sized_buffer TPM::ALG_RSA
     end
 
+    def rsa?
+      alg_type == TPM::ALG_RSA
+    end
+
+    def ecc?
+      alg_type == TPM::ALG_ECC
+    end
+
     def key
       if parameters.symmetric == TPM::ALG_NULL
-        case alg_type
-        when TPM::ALG_ECC
+        if ecc?
           ecc_key
-        when TPM::ALG_RSA
+        elsif rsa?
           rsa_key
         else
           raise "Type #{alg_type} not supported"
@@ -56,21 +63,23 @@ module TPM
       end
     end
 
+    def openssl_curve_name
+      if ecc?
+        CURVE_TPM_TO_OPENSSL[parameters.curve_id] || raise("Unknown curve #{parameters.curve_id}")
+      end
+    end
+
     private
 
     def ecc_key
       if parameters.scheme == TPM::ALG_ECDSA
-        curve = CURVE_TPM_TO_OPENSSL[parameters.curve_id]
+        group = OpenSSL::PKey::EC::Group.new(openssl_curve_name)
+        pkey = OpenSSL::PKey::EC.new(group)
+        public_key_bn = OpenSSL::BN.new("\x04" + unique.buffer.value, 2)
+        public_key_point = OpenSSL::PKey::EC::Point.new(group, public_key_bn)
+        pkey.public_key = public_key_point
 
-        if curve
-          group = OpenSSL::PKey::EC::Group.new(curve)
-          pkey = OpenSSL::PKey::EC.new(group)
-          public_key_bn = OpenSSL::BN.new("\x04" + unique.buffer.value, 2)
-          public_key_point = OpenSSL::PKey::EC::Point.new(group, public_key_bn)
-          pkey.public_key = public_key_point
-
-          pkey
-        end
+        pkey
       end
     end
 

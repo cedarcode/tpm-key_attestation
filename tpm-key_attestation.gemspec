@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "bindata", "~> 2.4"
-  spec.add_dependency "openssl-signature_algorithm", "~> 0.4.0"
+  spec.add_dependency "openssl-signature_algorithm", "~> 1.0"
 end

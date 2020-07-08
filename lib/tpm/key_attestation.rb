@@ -2,9 +2,11 @@
 
 require "openssl"
 require "tpm/key_attestation/version"
+
 require "tpm/aik_certificate"
 require "tpm/certify_validator"
 require "tpm/constants"
+require "tpm/public_area"
 
 module TPM
   class KeyAttestation
@@ -71,7 +73,7 @@ module TPM
           certify_info,
           signature,
           qualifying_data,
-          certified_key,
+          public_area,
           signature_algorithm: signature_algorithm,
           hash_algorithm: hash_algorithm
         )

@@ -6,7 +6,7 @@ require "tpm/s_attest"
 
 module TPM
   class CertifyValidator
-    attr_reader :info, :signature, :nonce, :object, :signature_algorithm, :hash_algorithm
+    attr_reader :info, :signature, :nonce, :public_area, :signature_algorithm, :hash_algorithm
 
     TPM_SIGNATURE_ALG_TO_OPENSSL = {
       ALG_RSASSA => OpenSSL::SignatureAlgorithm::RSAPKCS1,
@@ -19,11 +19,11 @@ module TPM
       ALG_SHA256 => "SHA256"
     }.freeze
 
-    def initialize(info, signature, nonce, object, signature_algorithm: ALG_RSASSA, hash_algorithm: ALG_SHA256)
+    def initialize(info, signature, nonce, public_area, signature_algorithm: ALG_RSASSA, hash_algorithm: ALG_SHA256)
       @info = info
       @signature = signature
       @nonce = nonce
-      @object = object
+      @public_area = public_area
       @signature_algorithm = signature_algorithm
       @hash_algorithm = hash_algorithm
     end
@@ -38,7 +38,7 @@ module TPM
       attest.attested_type == TPM::ST_ATTEST_CERTIFY &&
         attest.extra_data.buffer == nonce &&
         attest.magic == TPM::GENERATED_VALUE &&
-        attest.attested.name.valid_for?(object)
+        attest.attested.name.valid_for?(public_area.name)
     end
 
     def valid_signature?(verify_key)

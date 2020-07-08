@@ -111,6 +111,32 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
+    context "when ECDSA algorithm" do
+      let(:root_key) { create_ecc_key }
+      let(:attestation_key) { create_ecc_key }
+      let(:attested_key) { create_ecc_key }
+
+      let(:signature_algorithm) { TPM::ALG_ECDSA }
+      let(:hash_algorithm) { TPM::ALG_SHA256 }
+
+      let(:certified_key) do
+        t_public = TPM::TPublic.new
+        t_public.alg_type = TPM::ALG_ECC
+        t_public.name_alg = name_alg
+        t_public.parameters.symmetric = TPM::ALG_NULL
+        t_public.parameters.scheme = TPM::ALG_ECDSA
+        t_public.parameters.curve_id = TPM::ECC_NIST_P256
+        t_public.parameters.kdf = TPM::ALG_NULL
+        t_public.unique.buffer = attested_key.public_key.to_bn.to_s(2)[1..-1]
+
+        t_public.to_binary_s
+      end
+
+      it "returns true" do
+        expect(key_attestation).to be_valid
+      end
+    end
+
     context "when signature is invalid" do
       context "because is signed with a different hash function" do
         let(:signature) { attestation_key.sign("SHA1", to_be_signed) }

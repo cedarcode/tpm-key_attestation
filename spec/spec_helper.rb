@@ -22,6 +22,10 @@ def create_rsa_key
   OpenSSL::PKey::RSA.new(key_bits)
 end
 
+def create_ecc_key
+  OpenSSL::PKey::EC.generate("prime256v1").generate_key
+end
+
 def create_certificate(key, root_certificate, root_key)
   certificate = OpenSSL::X509::Certificate.new
   certificate.version = 2

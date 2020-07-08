@@ -11,6 +11,8 @@ module TPM
   ALG_RSA = 0x0001
   ALG_SHA1 = 0x0004
   ALG_SHA256 = 0x000B
+  ALG_SHA384 = 0x000C
+  ALG_SHA512 = 0x000D
   ALG_NULL = 0x0010
   ALG_RSASSA = 0x0014
   ALG_RSAPSS = 0x0016
@@ -19,6 +21,8 @@ module TPM
 
   # ECC curves
   ECC_NIST_P256 = 0x0003
+  ECC_NIST_P384 = 0x0004
+  ECC_NIST_P521 = 0x0005
 
   # https://trustedcomputinggroup.org/resource/vendor-id-registry/ section 2 "TPM Capabilities Vendor ID (CAP_VID)"
   VENDOR_IDS = {

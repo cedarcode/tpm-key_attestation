@@ -16,7 +16,9 @@ module TPM
 
     TPM_HASH_ALG_TO_OPENSSL = {
       ALG_SHA1 => "SHA1",
-      ALG_SHA256 => "SHA256"
+      ALG_SHA256 => "SHA256",
+      ALG_SHA384 => "SHA384",
+      ALG_SHA512 => "SHA512"
     }.freeze
 
     def initialize(info, signature, nonce, public_area, signature_algorithm: ALG_RSASSA, hash_algorithm: ALG_SHA256)

@@ -22,8 +22,10 @@ def create_rsa_key
   OpenSSL::PKey::RSA.new(key_bits)
 end
 
-def create_ecc_key
-  OpenSSL::PKey::EC.generate("prime256v1").generate_key
+def create_ecc_key(curve_id = TPM::ECC_NIST_P256)
+  pkey_group_name = TPM::TPublic::CURVE_TPM_TO_OPENSSL[curve_id] || raise("Can't find curve id='#{curve_id}'")
+
+  OpenSSL::PKey::EC.generate(pkey_group_name).generate_key
 end
 
 def create_certificate(key, root_certificate, root_key)

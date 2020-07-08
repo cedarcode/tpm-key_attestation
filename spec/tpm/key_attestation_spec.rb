@@ -112,12 +112,13 @@ RSpec.describe TPM::KeyAttestation do
     end
 
     context "when ECDSA algorithm" do
-      let(:root_key) { create_ecc_key }
-      let(:attestation_key) { create_ecc_key }
-      let(:attested_key) { create_ecc_key }
+      let(:root_key) { create_ecc_key(curve_id) }
+      let(:attestation_key) { create_ecc_key(curve_id) }
+      let(:attested_key) { create_ecc_key(curve_id) }
 
       let(:signature_algorithm) { TPM::ALG_ECDSA }
       let(:hash_algorithm) { TPM::ALG_SHA256 }
+      let(:hash_function) { "SHA256" }
 
       let(:certified_key) do
         t_public = TPM::TPublic.new
@@ -125,15 +126,37 @@ RSpec.describe TPM::KeyAttestation do
         t_public.name_alg = name_alg
         t_public.parameters.symmetric = TPM::ALG_NULL
         t_public.parameters.scheme = TPM::ALG_ECDSA
-        t_public.parameters.curve_id = TPM::ECC_NIST_P256
+        t_public.parameters.curve_id = curve_id
         t_public.parameters.kdf = TPM::ALG_NULL
         t_public.unique.buffer = attested_key.public_key.to_bn.to_s(2)[1..-1]
 
         t_public.to_binary_s
       end
 
+      let(:curve_id) { TPM::ECC_NIST_P256 }
+
       it "returns true" do
         expect(key_attestation).to be_valid
+      end
+
+      context "when P384 curve" do
+        let(:hash_algorithm) { TPM::ALG_SHA384 }
+        let(:hash_function) { "SHA384" }
+        let(:curve_id) { TPM::ECC_NIST_P384 }
+
+        it "returns true" do
+          expect(key_attestation).to be_valid
+        end
+      end
+
+      context "when P521 curve" do
+        let(:hash_algorithm) { TPM::ALG_SHA512 }
+        let(:hash_function) { "SHA512" }
+        let(:curve_id) { TPM::ECC_NIST_P521 }
+
+        it "returns true" do
+          expect(key_attestation).to be_valid
+        end
       end
     end
 

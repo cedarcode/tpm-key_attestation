@@ -10,7 +10,13 @@ module TPM
   # Section 12.2.4 in https://trustedcomputinggroup.org/wp-content/uploads/TPM-Rev-2.0-Part-2-Structures-01.38.pdf
   class TPublic < BinData::Record
     BYTE_LENGTH = 8
-    CURVE_TPM_TO_OPENSSL = { TPM::ECC_NIST_P256 => "prime256v1" }.freeze
+
+    CURVE_TPM_TO_OPENSSL = {
+      TPM::ECC_NIST_P256 => "prime256v1",
+      TPM::ECC_NIST_P384 => "secp384r1",
+      TPM::ECC_NIST_P521 => "secp521r1",
+    }.freeze
+
     RSA_KEY_DEFAULT_PUBLIC_EXPONENT = 2**16 + 1
 
     class << self

@@ -70,7 +70,8 @@ module TPM
     end
 
     def openssl_signature_algorithm_class
-      TPM_SIGNATURE_ALG_TO_OPENSSL[signature_algorithm] || raise("Unsupported signature algorithm #{algorithm}")
+      TPM_SIGNATURE_ALG_TO_OPENSSL[signature_algorithm] ||
+        raise("Unsupported signature algorithm #{signature_algorithm}")
     end
   end
 end

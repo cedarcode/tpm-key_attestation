@@ -137,6 +137,10 @@ RSpec.describe TPM::KeyAttestation do
 
       it "returns true" do
         expect(key_attestation).to be_valid
+
+        expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+        expect(key_attestation.key.group.curve_name).to eq("prime256v1")
+        expect(key_attestation.key.public_key).to eq(attested_key.public_key)
       end
 
       context "when P384 curve" do
@@ -146,6 +150,10 @@ RSpec.describe TPM::KeyAttestation do
 
         it "returns true" do
           expect(key_attestation).to be_valid
+
+          expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+          expect(key_attestation.key.group.curve_name).to eq("secp384r1")
+          expect(key_attestation.key.public_key).to eq(attested_key.public_key)
         end
       end
 
@@ -156,6 +164,10 @@ RSpec.describe TPM::KeyAttestation do
 
         it "returns true" do
           expect(key_attestation).to be_valid
+
+          expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+          expect(key_attestation.key.group.curve_name).to eq("secp521r1")
+          expect(key_attestation.key.public_key).to eq(attested_key.public_key)
         end
       end
     end

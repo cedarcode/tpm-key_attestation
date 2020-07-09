@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "bindata"
+require "openssl"
 require "tpm/constants"
 require "tpm/sized_buffer"
 require "tpm/t_public/s_ecc_parms"

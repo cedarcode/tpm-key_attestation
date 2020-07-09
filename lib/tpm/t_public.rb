@@ -18,7 +18,9 @@ module TPM
       TPM::ECC_NIST_P521 => "secp521r1",
     }.freeze
 
+    BN_BASE = 2
     RSA_KEY_DEFAULT_PUBLIC_EXPONENT = 2**16 + 1
+    ECC_UNCOMPRESSED_POINT_INDICATOR = "\x04"
 
     class << self
       alias_method :deserialize, :read
@@ -75,12 +77,11 @@ module TPM
     def ecc_key
       if parameters.scheme == TPM::ALG_ECDSA
         group = OpenSSL::PKey::EC::Group.new(openssl_curve_name)
-        pkey = OpenSSL::PKey::EC.new(group)
-        public_key_bn = OpenSSL::BN.new("\x04" + unique.buffer.value, 2)
-        public_key_point = OpenSSL::PKey::EC::Point.new(group, public_key_bn)
-        pkey.public_key = public_key_point
 
-        pkey
+        key = OpenSSL::PKey::EC.new(group)
+        key.public_key = OpenSSL::PKey::EC::Point.new(group, bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.buffer.value))
+
+        key
       end
     end
 
@@ -100,7 +101,7 @@ module TPM
 
     def bn(data)
       if data
-        OpenSSL::BN.new(data, 2)
+        OpenSSL::BN.new(data, BN_BASE)
       end
     end
   end

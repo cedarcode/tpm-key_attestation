@@ -11,7 +11,7 @@ require "tpm/public_area"
 module TPM
   class KeyAttestation
     # https://docs.microsoft.com/en-us/windows-server/security/guarded-fabric-shielded-vm/guarded-fabric-install-trusted-tpm-root-certificates
-    ROOT_CERTIFICATES =
+    TRUSTED_CERTIFICATES =
       begin
         pattern = File.expand_path(File.join(__dir__, "certificates", "*", "RootCA", "*.*"))
         Dir.glob(pattern).map do |filename|
@@ -29,7 +29,7 @@ module TPM
       :signature_algorithm,
       :hash_algorithm,
       :qualifying_data,
-      :root_certificates
+      :trusted_certificates
     )
 
     def initialize(
@@ -40,7 +40,7 @@ module TPM
       qualifying_data,
       signature_algorithm: ALG_RSASSA,
       hash_algorithm: ALG_SHA256,
-      root_certificates: ROOT_CERTIFICATES
+      trusted_certificates: TRUSTED_CERTIFICATES
     )
       @certify_info = certify_info
       @signature = signature
@@ -50,7 +50,7 @@ module TPM
       @signature_algorithm = signature_algorithm
       @hash_algorithm = hash_algorithm
       @qualifying_data = qualifying_data
-      @root_certificates = root_certificates
+      @trusted_certificates = trusted_certificates
     end
 
     def key
@@ -88,7 +88,7 @@ module TPM
     def trust_store
       @trust_store ||=
         OpenSSL::X509::Store.new.tap do |trust_store|
-          root_certificates.uniq(&:serial).each { |root_certificate| trust_store.add_cert(root_certificate) }
+          trusted_certificates.uniq(&:serial).each { |trusted_certificate| trust_store.add_cert(trusted_certificate) }
         end
     end
 

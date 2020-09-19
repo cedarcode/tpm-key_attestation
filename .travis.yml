@@ -34,7 +34,7 @@ matrix:
     - gemfile: gemfiles/openssl_head.gemfile
 
 before_install:
-  - ./install-openssl.sh
-  - ./install-ruby.sh
+  - source ./install-openssl.sh
+  - source ./install-ruby.sh
   - gem install bundler -v "~> 2.0"
   - rm Gemfile.lock

@@ -3,7 +3,7 @@
 TPM Key Attestation utitlies
 
 [![Gem](https://img.shields.io/gem/v/tpm-key_attestation.svg?style=flat-square&color=informational)](https://rubygems.org/gems/tpm-key_attestation)
-[![Travis](https://img.shields.io/travis/cedarcode/tpm-key_attestation/master.svg?style=flat-square)](https://travis-ci.org/cedarcode/tpm-key_attestation)
+[![Actions Build](https://github.com/cedarcode/tpm-key_attestation/workflows/build/badge.svg)](https://github.com/cedarcode/tpm-key_attestation/actions)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-informational.svg?style=flat-square)](https://conventionalcommits.org)
 
 ## Installation

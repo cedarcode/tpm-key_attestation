@@ -3,6 +3,7 @@ AllCops:
   DisabledByDefault: true
   Exclude:
     - "gemfiles/**/*"
+    - "vendor/bundle/**/*"
 
 Bundler:
   Enabled: true

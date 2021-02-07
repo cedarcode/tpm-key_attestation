@@ -24,7 +24,6 @@ gemfile:
   - gemfiles/openssl_2_2.gemfile
   - gemfiles/openssl_2_1.gemfile
   - gemfiles/openssl_2_0.gemfile
-  - gemfiles/openssl_default.gemfile
 
 matrix:
   fast_finish: true

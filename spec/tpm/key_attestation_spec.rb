@@ -82,7 +82,11 @@ RSpec.describe TPM::KeyAttestation do
       let(:root_certificates) { TPM::KeyAttestation::ROOT_CERTIFICATES }
 
       let(:root_certificate) do
-        root_certificate = TPM::KeyAttestation::ROOT_CERTIFICATES.last
+        # TPM::KeyAttestation::ROOT_CERTIFICATES actually contains both root certificates
+        # and intermediate certificates
+        # For this particular test case which self-signs will only work for root certificates
+        really_root_certificates = TPM::KeyAttestation::ROOT_CERTIFICATES.select { |c| c.issuer == c.subject }
+        root_certificate = really_root_certificates.last
         root_certificate.public_key = root_key
         root_certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
 

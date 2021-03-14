@@ -124,6 +124,15 @@ RSpec.describe TPM::KeyAttestation do
           end
 
           it "returns true" do
+            with_duplicate_subject =
+              TPM::KeyAttestation::TRUSTED_CERTIFICATES.any? do |c|
+                c.serial != root_cert.serial && c.subject == root_cert.subject
+              end
+
+            if with_duplicate_subject
+              skip "Re-instante once https://github.com/ruby/openssl/issues/389 is released"
+            end
+
             expect(key_attestation).to be_valid
           end
         end

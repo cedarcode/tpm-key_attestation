@@ -16,7 +16,7 @@ RSpec.describe TPM::KeyAttestation do
       qualifying_data,
       signature_algorithm: signature_algorithm,
       hash_algorithm: hash_algorithm,
-      root_certificates: root_certificates
+      trusted_certificates: trusted_certificates
     )
   end
 
@@ -26,7 +26,7 @@ RSpec.describe TPM::KeyAttestation do
     create_certificate(attestation_key, root_certificate, root_key)
   end
 
-  let(:root_certificates) { [root_certificate] }
+  let(:trusted_certificates) { [root_certificate] }
 
   let(:root_certificate) { create_root_certificate(root_key) }
   let(:root_key) { create_rsa_key }
@@ -78,19 +78,64 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
-    context "when using the default root certificates" do
-      let(:root_certificates) { TPM::KeyAttestation::ROOT_CERTIFICATES }
+    context "when using a certificate signed by default trusted certificates" do
+      let(:trusted_certificates) { TPM::KeyAttestation::TRUSTED_CERTIFICATES.dup }
 
-      let(:root_certificate) do
-        root_certificate = TPM::KeyAttestation::ROOT_CERTIFICATES.last
-        root_certificate.public_key = root_key
-        root_certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
+      TPM::KeyAttestation::TRUSTED_CERTIFICATES.reject do |certificate|
+        certificate.subject == certificate.issuer
+      end.dup.each do |intermediate_cert|
+        context "when signed by intermediate certificate
+          #{intermediate_cert.subject.to_s(OpenSSL::X509::Name::COMPAT)}" do
+          let(:intermediate_certificate) do
+            root_certificate = trusted_certificates.find do |trusted_certificate|
+              trusted_certificate.subject == intermediate_cert.issuer
+            end
+            root_certificate.public_key = root_key
+            root_certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
 
-        root_certificate
+            intermediate_cert.public_key = intermediate_key
+            intermediate_cert.sign(root_key, OpenSSL::Digest::SHA256.new)
+
+            intermediate_cert
+          end
+
+          let(:intermediate_key) { create_rsa_key }
+
+          let(:certificate) do
+            create_certificate(attestation_key, intermediate_certificate, intermediate_key)
+          end
+
+          it "returns true" do
+            expect(key_attestation).to be_valid
+          end
+        end
       end
 
-      it "returns true" do
-        expect(key_attestation).to be_valid
+      TPM::KeyAttestation::TRUSTED_CERTIFICATES.select do |certificate|
+        certificate.subject == certificate.issuer
+      end.dup.each do |root_cert|
+        context "when signed by root certificate
+          #{root_cert.subject.to_s(OpenSSL::X509::Name::COMPAT)}" do
+          let(:root_certificate) do
+            root_cert.public_key = root_key
+            root_cert.sign(root_key, OpenSSL::Digest::SHA256.new)
+
+            root_cert
+          end
+
+          it "returns true" do
+            with_duplicate_subject =
+              TPM::KeyAttestation::TRUSTED_CERTIFICATES.any? do |c|
+                c.serial != root_cert.serial && c.subject == root_cert.subject
+              end
+
+            if with_duplicate_subject
+              skip "Re-instante once https://github.com/ruby/openssl/issues/389 is released"
+            end
+
+            expect(key_attestation).to be_valid
+          end
+        end
       end
     end
 

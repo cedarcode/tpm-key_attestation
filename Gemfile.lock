@@ -3,7 +3,7 @@ PATH
   specs:
     tpm-key_attestation (0.10.0)
       bindata (~> 2.4)
-      openssl (~> 2.0)
+      openssl (> 2.0, < 3.1)
       openssl-signature_algorithm (~> 1.0)
 
 GEM

@@ -77,11 +77,18 @@ module TPM
     def ecc_key
       if parameters.scheme == TPM::ALG_ECDSA
         group = OpenSSL::PKey::EC::Group.new(openssl_curve_name)
+        point = OpenSSL::PKey::EC::Point.new(group, bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.buffer.value))
 
-        key = OpenSSL::PKey::EC.new(group)
-        key.public_key = OpenSSL::PKey::EC::Point.new(group, bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.buffer.value))
+        # RFC5480 SubjectPublicKeyInfo
+        asn1 = OpenSSL::ASN1::Sequence([
+          OpenSSL::ASN1::Sequence([
+            OpenSSL::ASN1::ObjectId("id-ecPublicKey"),
+            OpenSSL::ASN1::ObjectId(group.curve_name),
+          ]),
+          OpenSSL::ASN1::BitString(point.to_octet_string(:uncompressed))
+        ])
 
-        key
+        OpenSSL::PKey::EC.new(asn1.to_der)
       end
     end
 
@@ -91,10 +98,12 @@ module TPM
         n = unique.buffer.value
 
         if parameters.key_bits / BYTE_LENGTH == n.size
-          key = OpenSSL::PKey::RSA.new(parameters.key_bits.value)
-          key.set_key(bn(n), bn(RSA_KEY_DEFAULT_PUBLIC_EXPONENT), nil)
-
-          key.public_key
+          # PKCS#1 RSAPublicKey
+          asn1 = OpenSSL::ASN1::Sequence([
+            OpenSSL::ASN1::Integer.new(bn(n)),
+            OpenSSL::ASN1::Integer.new(bn(RSA_KEY_DEFAULT_PUBLIC_EXPONENT)),
+          ])
+          key = OpenSSL::PKey::RSA.new(asn1.to_der)
         end
       end
     end

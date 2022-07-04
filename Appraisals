@@ -11,3 +11,7 @@ end
 appraise "openssl_2_0" do
   gem "openssl", "~> 2.0.0"
 end
+
+appraise "openssl_3_0" do
+  gem "openssl", "~> 3.0.0"
+end

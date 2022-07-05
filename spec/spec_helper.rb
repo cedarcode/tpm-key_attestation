@@ -25,7 +25,7 @@ end
 def create_ecc_key(curve_id = TPM::ECC_NIST_P256)
   pkey_group_name = TPM::TPublic::CURVE_TPM_TO_OPENSSL[curve_id] || raise("Can't find curve id='#{curve_id}'")
 
-  OpenSSL::PKey::EC.generate(pkey_group_name).generate_key
+  OpenSSL::PKey::EC.generate(pkey_group_name)
 end
 
 def create_certificate(key, root_certificate, root_key)

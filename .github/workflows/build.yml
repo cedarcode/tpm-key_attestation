@@ -24,7 +24,6 @@ jobs:
         gemfile:
           - openssl_2_2
           - openssl_2_1
-          - openssl_2_0
           - openssl_3_0
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile

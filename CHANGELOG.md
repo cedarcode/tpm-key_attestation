@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.11.0] - 2022-07-05
+
+- Support OpenSSL ~>3.0.0. Credits to @ClearlyClaire <3
+
 ## [v0.10.0] - 2020-07-09
 
 ### Added
@@ -67,6 +71,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.11.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.10.0...v0.11.0/
 [v0.10.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.9.0...v0.10.0/
 [v0.9.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.8.0...v0.9.0/
 [v0.8.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.7.0...v0.8.0/
@@ -79,3 +84,4 @@ replacement of `JOSE` format `algorithm` string
 [v0.1.0]: https://github.com/cedarcode/tpm-key_attestation/compare/57c926ef7e83830cee8d111fdc5ccaf99ab2e861...v0.1.0/
 
 [@santiagorodriguez96]: https://github.com/santiagorodriguez96
+[@ClearlyClaire]: https://github.com/ClearlyClaire

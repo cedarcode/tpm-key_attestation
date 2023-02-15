@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.12.0] - 2022-07-05
+
+- Loose OpenSSL dependency to support 3.2 users. Credits to @stanhu <3
+
 ## [v0.11.0] - 2022-07-05
 
 - Support OpenSSL ~>3.0.0. Credits to @ClearlyClaire <3
@@ -71,6 +75,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.12.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.11.0...v0.12.0/
 [v0.11.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.10.0...v0.11.0/
 [v0.10.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.9.0...v0.10.0/
 [v0.9.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.8.0...v0.9.0/

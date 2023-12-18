@@ -11,10 +11,14 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-20.04
+          - windows-latest
+          - macos-latest
         ruby:
           - '3.2'
           - '3.1'

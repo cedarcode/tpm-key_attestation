@@ -15,7 +15,7 @@ module TPM
       begin
         pattern = File.expand_path(File.join(__dir__, "certificates", "*", "RootCA", "*.*"))
         Dir.glob(pattern).map do |filename|
-          File.open(filename) { |file| OpenSSL::X509::Certificate.new(file) }
+          File.binread(filename) { |file| OpenSSL::X509::Certificate.new(file) }
         end
       end
 

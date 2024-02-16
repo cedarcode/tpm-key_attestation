@@ -9,7 +9,7 @@ RSpec.describe "TPM::AIKCertificate" do
   context "#conformant?" do
     let(:certificate) do
       certificate = OpenSSL::X509::Certificate.new
-      certificate.version = certificate_version
+      certificate.version = 2
       certificate.subject = OpenSSL::X509::Name.parse(certificate_subject)
       certificate.not_before = certificate_start_time
       certificate.not_after = certificate_end_time
@@ -31,7 +31,6 @@ RSpec.describe "TPM::AIKCertificate" do
 
     let(:key) { create_rsa_key }
 
-    let(:certificate_version) { 2 }
     let(:certificate_subject) { "" }
     let(:certificate_start_time) { Time.now - 1 }
     let(:certificate_end_time) { certificate_start_time + 60 }
@@ -76,7 +75,9 @@ RSpec.describe "TPM::AIKCertificate" do
     end
 
     context "when version is incorrect" do
-      let(:certificate_version) { 3 }
+      before do
+        certificate.version = 3
+      end
 
       it "returns false" do
         expect(aik_certificate).not_to be_conformant

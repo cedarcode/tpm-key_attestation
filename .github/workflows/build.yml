@@ -54,22 +54,10 @@ jobs:
             gemfile: openssl_2_1
             os: macos-latest
           - ruby: '3.2'
-            gemfile: openssl_3_0
-            os: macos-latest
-          - ruby: '3.2'
-            gemfile: openssl_3_1
-            os: macos-latest
-          - ruby: '3.2'
             gemfile: openssl_2_2
             os: windows-latest
           - ruby: '3.2'
             gemfile: openssl_2_1
-            os: windows-latest
-          - ruby: '3.2'
-            gemfile: openssl_3_0
-            os: windows-latest
-          - ruby: '3.2'
-            gemfile: openssl_3_1
             os: windows-latest
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile

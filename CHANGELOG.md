@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.12.1] - 2024-08-05
+
+- Fix loading trusted certificates on Windows. #20 & #21 [@johnnyshields], [@salmanasiddiqui]
+
 ## [v0.12.0] - 2022-07-05
 
 - Loose OpenSSL dependency to support 3.2 users. Credits to @stanhu <3

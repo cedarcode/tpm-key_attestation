@@ -22,7 +22,7 @@ jobs:
         os:
           - ubuntu-20.04
           - windows-latest
-          - macos-latest
+          - macos-12
         ruby:
           - '3.2'
           - '3.1'
@@ -47,16 +47,16 @@ jobs:
             gemfile: openssl_3_1
           - ruby: '3.1'
             gemfile: openssl_2_2
-            os: macos-latest
+            os: macos-12
           - ruby: '3.1'
             gemfile: openssl_2_1
-            os: macos-latest
+            os: macos-12
           - ruby: '3.2'
             gemfile: openssl_2_2
-            os: macos-latest
+            os: macos-12
           - ruby: '3.2'
             gemfile: openssl_2_1
-            os: macos-latest
+            os: macos-12
           - ruby: '3.2'
             gemfile: openssl_2_2
             os: windows-latest

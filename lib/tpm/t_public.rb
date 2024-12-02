@@ -4,6 +4,7 @@ require "bindata"
 require "openssl"
 require "tpm/constants"
 require "tpm/sized_buffer"
+require "tpm/tpms_ecc_point"
 require "tpm/t_public/s_ecc_parms"
 require "tpm/t_public/s_rsa_parms"
 
@@ -42,7 +43,7 @@ module TPM
     end
 
     choice :unique, selection: :alg_type do
-      sized_buffer TPM::ALG_ECC
+      tpms_ecc_point TPM::ALG_ECC
       sized_buffer TPM::ALG_RSA
     end
 
@@ -77,7 +78,10 @@ module TPM
     def ecc_key
       if parameters.scheme == TPM::ALG_ECDSA
         group = OpenSSL::PKey::EC::Group.new(openssl_curve_name)
-        point = OpenSSL::PKey::EC::Point.new(group, bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.buffer.value))
+        point = OpenSSL::PKey::EC::Point.new(
+          group,
+          bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.x.buffer.value + unique.y.buffer.value)
+        )
 
         # RFC5480 SubjectPublicKeyInfo
         asn1 = OpenSSL::ASN1::Sequence(

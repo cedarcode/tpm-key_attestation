@@ -353,6 +353,39 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
+    context 'when ECDSA algorithm' do
+      context "when the scheme parameter from pubArea is TPM_ALG_NULL" do
+        let(:root_key) { create_ecc_key(curve_id) }
+        let(:attestation_key) { create_ecc_key(curve_id) }
+        let(:attested_key) { create_ecc_key(curve_id) }
+
+        let(:signature_algorithm) { TPM::ALG_ECDSA }
+        let(:hash_algorithm) { TPM::ALG_SHA256 }
+        let(:hash_function) { "SHA256" }
+
+        let(:certified_key) do
+          t_public = TPM::TPublic.new
+          t_public.alg_type = TPM::ALG_ECC
+          t_public.name_alg = name_alg
+          t_public.parameters.symmetric = TPM::ALG_NULL
+          t_public.parameters.scheme = TPM::ALG_NULL
+          t_public.parameters.curve_id = curve_id
+          t_public.parameters.kdf = TPM::ALG_NULL
+          t_public.unique.buffer = attested_key.public_key.to_bn.to_s(2)[1..-1]
+
+          t_public.to_binary_s
+        end
+
+        let(:curve_id) { TPM::ECC_NIST_P256 }
+
+        it "returns a public ECDSA key with the correct properties" do
+          expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+          expect(key_attestation.key.group.curve_name).to eq("prime256v1")
+          expect(key_attestation.key.public_key).to eq(attested_key.public_key)
+        end
+      end
+    end
+
     context "when is not valid" do
       before do
         expect(key_attestation).to receive(:valid?).and_return(false)

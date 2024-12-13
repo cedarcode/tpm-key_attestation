@@ -75,7 +75,8 @@ module TPM
     private
 
     def ecc_key
-      if parameters.scheme == TPM::ALG_ECDSA
+      case parameters.scheme
+      when TPM::ALG_ECDSA, TPM::ALG_NULL
         group = OpenSSL::PKey::EC::Group.new(openssl_curve_name)
         point = OpenSSL::PKey::EC::Point.new(group, bn(ECC_UNCOMPRESSED_POINT_INDICATOR + unique.buffer.value))
 

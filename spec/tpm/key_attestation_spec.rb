@@ -215,6 +215,27 @@ RSpec.describe TPM::KeyAttestation do
           expect(key_attestation.key.public_key).to eq(attested_key.public_key)
         end
       end
+
+      context "when the key of the AIK certificate is an RSA key" do
+        let(:root_key) { create_rsa_key }
+        let(:cert_key) { create_rsa_key }
+
+        let(:certificate) do
+          create_certificate(cert_key, root_certificate, root_key)
+        end
+
+        let(:signature_algorithm) { TPM::ALG_RSASSA }
+        let(:hash_algorithm) { TPM::ALG_SHA256 }
+        let(:signature) { cert_key.sign(hash_function, to_be_signed) }
+
+        it "returns true" do
+          expect(key_attestation).to be_valid
+
+          expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+          expect(key_attestation.key.group.curve_name).to eq("prime256v1")
+          expect(key_attestation.key.public_key).to eq(attested_key.public_key)
+        end
+      end
     end
 
     context "when signature is invalid" do

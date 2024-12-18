@@ -44,7 +44,13 @@ module TPM
     end
 
     def valid_signature?(verify_key)
-      openssl_signature_algorithm = openssl_signature_algorithm_class.new(**openssl_signature_algorithm_parameters)
+      parameters = { hash_function: openssl_hash_function }
+
+      if verify_key.is_a?(OpenSSL::PKey::EC) || verify_key.is_a?(OpenSSL::PKey::EC::Point)
+        parameters[:curve] = verify_key.group.curve_name
+      end
+
+      openssl_signature_algorithm = openssl_signature_algorithm_class.new(**parameters)
       openssl_signature_algorithm.verify_key = verify_key
       openssl_signature_algorithm.verify(signature, info)
     rescue OpenSSL::SignatureAlgorithm::Error
@@ -53,16 +59,6 @@ module TPM
 
     def attest
       @attest ||= TPM::SAttest.deserialize(info)
-    end
-
-    def openssl_signature_algorithm_parameters
-      parameters = { hash_function: openssl_hash_function }
-
-      if public_area.ecc?
-        parameters[:curve] = public_area.openssl_curve_name
-      end
-
-      parameters
     end
 
     def openssl_hash_function

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.13.0] - 2025-01-21
+
+- Use public key from AIK cert for signature algorithm initalization [@santiagorodriguez96]
+- Support algorithm being ECC and pubArea's scheme parameter being TPM_ALG_NULL [@santiagorodriguez96]
+- Allow TPM:TPublic to handle ECC keys in pubArea correctly [@santiagorodriguez96]
+
 ## [v0.12.1] - 2024-08-05
 
 - Fix loading trusted certificates on Windows. #20 & #21 [@johnnyshields], [@salmanasiddiqui]
@@ -79,6 +85,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.13.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.12.1...v0.13.0/
 [v0.12.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.11.0...v0.12.0/
 [v0.11.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.10.0...v0.11.0/
 [v0.10.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.9.0...v0.10.0/

@@ -24,7 +24,7 @@ RSpec.describe "TPM::AIKCertificate" do
         extension_factory.create_extension("subjectAltName", "ASN1:SEQUENCE:dir_seq", certificate_san_critical),
       ]
 
-      certificate.sign(key, OpenSSL::Digest::SHA256.new)
+      certificate.sign(key, OpenSSL::Digest.new('SHA256'))
 
       certificate
     end

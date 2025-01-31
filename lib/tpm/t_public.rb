@@ -99,6 +99,8 @@ module TPM
 
         OpenSSL::PKey::EC.new(asn1.to_der)
       end
+    rescue OpenSSL::PKey::EC::Point::Error
+      nil
     end
 
     def rsa_key

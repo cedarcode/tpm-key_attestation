@@ -386,25 +386,23 @@ RSpec.describe TPM::KeyAttestation do
       context "when the scheme parameter from pubArea is TPM_ALG_NULL" do
         let(:scheme) { TPM::ALG_NULL }
 
-        context "when the curve_id of the attested_key is ECC_NIST_P256" do
+        context "when t_public.parameters and t_public.unique are compatible" do
           let(:key_curve_id) { TPM::ECC_NIST_P256 }
+          let(:t_public_curve_id) { TPM::ECC_NIST_P256 }
 
-          context "when the curve_id of t_public is ECC_NIST_P256" do
-            let(:t_public_curve_id) { TPM::ECC_NIST_P256 }
-
-            it "returns a public ECDSA key with the correct properties" do
-              expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
-              expect(key_attestation.key.group.curve_name).to eq("prime256v1")
-              expect(key_attestation.key.public_key).to eq(attested_key.public_key)
-            end
+          it "returns a public ECDSA key with the correct properties" do
+            expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+            expect(key_attestation.key.group.curve_name).to eq("prime256v1")
+            expect(key_attestation.key.public_key).to eq(attested_key.public_key)
           end
+        end
 
-          context "when the curve_id of t_public is different than ECC_NIST_P256" do
-            let(:t_public_curve_id) { TPM::ECC_NIST_P256 + 1 }
+        context "when t_public.parameters and t_public.unique are incompatible" do
+          let(:key_curve_id) { TPM::ECC_NIST_P256 }
+          let(:t_public_curve_id) { TPM::ECC_NIST_P256 + 1 }
 
-            it "returns nil" do
-              expect(key_attestation.key).to be nil
-            end
+          it "returns nil" do
+            expect(key_attestation.key).to be nil
           end
         end
       end

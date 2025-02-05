@@ -358,38 +358,53 @@ RSpec.describe TPM::KeyAttestation do
     end
 
     context 'when ECDSA algorithm' do
+      let(:root_key) { create_ecc_key(key_curve_id) }
+      let(:attestation_key) { create_ecc_key(key_curve_id) }
+      let(:attested_key) { create_ecc_key(key_curve_id) }
+      let(:key_curve_id) { TPM::ECC_NIST_P256 }
+
+      let(:signature_algorithm) { TPM::ALG_ECDSA }
+      let(:hash_algorithm) { TPM::ALG_SHA256 }
+      let(:hash_function) { "SHA256" }
+
+      let(:certified_key) do
+        t_public = TPM::TPublic.new
+        t_public.alg_type = TPM::ALG_ECC
+        t_public.name_alg = name_alg
+        t_public.parameters.symmetric = TPM::ALG_NULL
+        t_public.parameters.scheme = scheme
+        t_public.parameters.curve_id = t_public_curve_id
+        t_public.parameters.kdf = TPM::ALG_NULL
+
+        public_key_bytes = attested_key.public_key.to_bn.to_s(2)[1..-1]
+        coordinate_length = public_key_bytes.size / 2
+        t_public.unique.x.buffer = public_key_bytes[0..(coordinate_length - 1)]
+        t_public.unique.y.buffer = public_key_bytes[coordinate_length..-1]
+
+        t_public.to_binary_s
+      end
+
       context "when the scheme parameter from pubArea is TPM_ALG_NULL" do
-        let(:root_key) { create_ecc_key(curve_id) }
-        let(:attestation_key) { create_ecc_key(curve_id) }
-        let(:attested_key) { create_ecc_key(curve_id) }
+        let(:scheme) { TPM::ALG_NULL }
 
-        let(:signature_algorithm) { TPM::ALG_ECDSA }
-        let(:hash_algorithm) { TPM::ALG_SHA256 }
-        let(:hash_function) { "SHA256" }
+        context "when t_public.parameters and t_public.unique are compatible" do
+          let(:t_public_curve_id) { TPM::ECC_NIST_P256 }
 
-        let(:certified_key) do
-          t_public = TPM::TPublic.new
-          t_public.alg_type = TPM::ALG_ECC
-          t_public.name_alg = name_alg
-          t_public.parameters.symmetric = TPM::ALG_NULL
-          t_public.parameters.scheme = TPM::ALG_NULL
-          t_public.parameters.curve_id = curve_id
-          t_public.parameters.kdf = TPM::ALG_NULL
-
-          public_key_bytes = attested_key.public_key.to_bn.to_s(2)[1..-1]
-          coordinate_length = public_key_bytes.size / 2
-          t_public.unique.x.buffer = public_key_bytes[0..(coordinate_length - 1)]
-          t_public.unique.y.buffer = public_key_bytes[coordinate_length..-1]
-
-          t_public.to_binary_s
+          it "returns a public ECDSA key with the correct properties" do
+            expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
+            expect(key_attestation.key.group.curve_name).to eq("prime256v1")
+            expect(key_attestation.key.public_key).to eq(attested_key.public_key)
+          end
         end
 
-        let(:curve_id) { TPM::ECC_NIST_P256 }
+        context "when t_public.parameters and t_public.unique are incompatible" do
+          # Make the curve in t_public.parameters different than the curve
+          # used to generate the coordinates of the t_public.unique field
+          let(:t_public_curve_id) { TPM::ECC_NIST_P384 }
 
-        it "returns a public ECDSA key with the correct properties" do
-          expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
-          expect(key_attestation.key.group.curve_name).to eq("prime256v1")
-          expect(key_attestation.key.public_key).to eq(attested_key.public_key)
+          it "returns nil" do
+            expect(key_attestation.key).to be nil
+          end
         end
       end
     end

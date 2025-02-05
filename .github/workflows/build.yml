@@ -28,26 +28,9 @@ jobs:
           - '3.2'
           - '3.1'
         gemfile:
-          - openssl_2_2
           - openssl_3_0
           - openssl_3_1
           - openssl_3_2
-        exclude:
-          - ruby: '3.1'
-            gemfile: openssl_2_2
-            os: macos-13
-          - ruby: '3.2'
-            gemfile: openssl_2_2
-            os: macos-13
-          - ruby: '3.2'
-            gemfile: openssl_2_2
-            os: windows-latest
-          - ruby: '3.3'
-            gemfile: openssl_2_2
-            os: macos-13
-          - ruby: '3.3'
-            gemfile: openssl_2_2
-            os: windows-latest
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.14.0] - 2025-02-06
+
+- Handle incompatibility between `parameters` and `unique` in `TPublic`. [@nicolastemciuc], [@santiagorodriguez96]
+
 ## [v0.13.1] - 2025-01-22
 
 - Fix build [@nicolastemciuc]

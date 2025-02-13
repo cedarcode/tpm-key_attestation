@@ -83,9 +83,35 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
     - uses: actions/checkout@v4
+
     - run: rm Gemfile.lock
+
+    - id: cache-openssl
+      if: matrix.os == 'ubuntu-22.04' && steps.cache-openssl.outputs.cache-hit != 'true'
+      uses: actions/cache@v4
+      with:
+        path: ~/openssl
+        key: openssl-ubuntu-22.04-openssl-1.1.1w-default
+
+    - name: Compile OpenSSL library
+      if: matrix.os == 'ubuntu-22.04' && steps.cache-openssl.outputs.cache-hit != 'true'
+      run: |
+        # Enable Bash debugging option temporarily for debugging use.
+        set -x
+        mkdir -p tmp/build-openssl && cd tmp/build-openssl
+        OPENSSL_COMMIT=$(echo openssl-1.1.1w | sed -e 's/^openssl-/OpenSSL_/' | sed -e 's/\./_/g')
+        git clone -b $OPENSSL_COMMIT --depth 1 https://github.com/openssl/openssl.git .
+        echo "Git commit: $(git rev-parse HEAD)"
+        # shared is required for 1.0.x.
+        ./Configure --prefix=$HOME/openssl --libdir=lib shared linux-x86_64
+        make depend && make -j4 && make install_sw
+
+    - name: configure openssl dir
+      run:  echo 'RUBY_CONFIGURE_OPTS="--with-openssl-dir=$HOME/openssl"' >> $GITHUB_ENV
+
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+
     - run: bundle exec rake

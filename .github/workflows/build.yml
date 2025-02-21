@@ -113,5 +113,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        self-hosted: true
 
     - run: bundle exec rake

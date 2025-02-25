@@ -53,6 +53,7 @@ jobs:
           - openssl_3_0
           - openssl_3_1
           - openssl_3_2
+          - openssl_3_3
         exclude:
           - ruby: '2.4'
             gemfile: openssl_3_0
@@ -68,6 +69,12 @@ jobs:
             gemfile: openssl_3_2
           - ruby: '2.6'
             gemfile: openssl_3_2
+          - ruby: '2.4'
+            gemfile: openssl_3_3
+          - ruby: '2.5'
+            gemfile: openssl_3_3
+          - ruby: '2.6'
+            gemfile: openssl_3_3
           - ruby: '3.1'
             gemfile: openssl_2_2
             os: macos-13

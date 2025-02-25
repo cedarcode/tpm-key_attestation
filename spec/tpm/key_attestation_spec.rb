@@ -68,7 +68,7 @@ RSpec.describe TPM::KeyAttestation do
   end
 
   let(:hash_function) { "SHA256" }
-  let(:qualifying_data) { OpenSSL::Digest::SHA256.digest("qualifying-data") }
+  let(:qualifying_data) { OpenSSL::Digest.digest('SHA256', "qualifying-data") }
   let(:attestation_key) { create_rsa_key }
 
   describe "#valid?" do
@@ -91,10 +91,10 @@ RSpec.describe TPM::KeyAttestation do
               trusted_certificate.subject == intermediate_cert.issuer
             end
             root_certificate.public_key = root_key
-            root_certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
+            root_certificate.sign(root_key, OpenSSL::Digest.new('SHA256'))
 
             intermediate_cert.public_key = intermediate_key
-            intermediate_cert.sign(root_key, OpenSSL::Digest::SHA256.new)
+            intermediate_cert.sign(root_key, OpenSSL::Digest.new('SHA256'))
 
             intermediate_cert
           end
@@ -118,7 +118,7 @@ RSpec.describe TPM::KeyAttestation do
           #{root_cert.subject.to_s(OpenSSL::X509::Name::COMPAT)}" do
           let(:root_certificate) do
             root_cert.public_key = root_key
-            root_cert.sign(root_key, OpenSSL::Digest::SHA256.new)
+            root_cert.sign(root_key, OpenSSL::Digest.new('SHA256'))
 
             root_cert
           end
@@ -286,7 +286,7 @@ RSpec.describe TPM::KeyAttestation do
       end
 
       context "because extraData is not using the correct algorithm" do
-        let(:certify_info_extra_data) { OpenSSL::Digest::SHA1.digest("qualifying-data") }
+        let(:certify_info_extra_data) { OpenSSL::Digest.digest('SHA1', "qualifying-data") }
 
         it "returns false" do
           expect(key_attestation).not_to be_valid

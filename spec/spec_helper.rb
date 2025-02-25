@@ -76,7 +76,7 @@ def create_certificate(key, root_certificate, root_key)
     extension_factory.create_extension("subjectAltName", "ASN1:SEQUENCE:dir_seq", certificate_san_critical),
   ]
 
-  certificate.sign(root_key, OpenSSL::Digest::SHA256.new)
+  certificate.sign(root_key, OpenSSL::Digest.new('SHA256'))
 
   certificate
 end
@@ -100,7 +100,7 @@ def create_root_certificate(key)
     extension_factory.create_extension("keyUsage", "keyCertSign,cRLSign", true),
   ]
 
-  certificate.sign(key, OpenSSL::Digest::SHA256.new)
+  certificate.sign(key, OpenSSL::Digest.new('SHA256'))
 
   certificate
 end

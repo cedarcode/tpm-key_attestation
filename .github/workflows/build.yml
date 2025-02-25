@@ -14,6 +14,21 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Lint code for consistent style
+        run: bundle exec rubocop -f github
   test:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -39,6 +54,7 @@ jobs:
           - openssl_3_0
           - openssl_3_1
           - openssl_3_2
+          - openssl_3_3
         exclude:
           - ruby: '2.4'
             gemfile: openssl_3_0
@@ -54,6 +70,12 @@ jobs:
             gemfile: openssl_3_2
           - ruby: '2.6'
             gemfile: openssl_3_2
+          - ruby: '2.4'
+            gemfile: openssl_3_3
+          - ruby: '2.5'
+            gemfile: openssl_3_3
+          - ruby: '2.6'
+            gemfile: openssl_3_3
           - ruby: '3.1'
             gemfile: openssl_2_2
             os: macos-13
@@ -93,4 +115,4 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - run: bundle exec rake
+    - run: bundle exec rspec

@@ -106,6 +106,18 @@ jobs:
           - ruby: '3.3'
             gemfile: openssl_2_1
             os: windows-latest
+          - ruby: '3.4'
+            gemfile: openssl_2_2
+            os: macos-13
+          - ruby: '3.4'
+            gemfile: openssl_2_1
+            os: macos-13
+          - ruby: '3.4'
+            gemfile: openssl_2_2
+            os: windows-latest
+          - ruby: '3.4'
+            gemfile: openssl_2_1
+            os: windows-latest
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:

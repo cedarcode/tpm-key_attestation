@@ -42,13 +42,11 @@ runs:
       shell: bash
       run: gem install bundler -v '~> 2.3.0'
 
-    - name: DEBUG
-      shell: bash
-      run: echo "${{ env.Gemfile }}
-
     - name: Cache Bundler Install
       id: bundler-cache
       uses: actions/cache@v4
+      env:
+        GEMFILE: ${{ env.BUNDLE_GEMFILE || 'Gemfile' }}
       with:
         path: ./vendor/bundle
         key: bundler-ruby-${{ inputs.version }}-${{ inputs.os }}-${{ hashFiles(env.Gemfile, 'tpm-key_attestation.gemspec') }}

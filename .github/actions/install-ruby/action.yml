@@ -52,5 +52,5 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        bundle config set --local path ./vendor/bundle
+        bundle config set --local path ../vendor/bundle
         bundle install

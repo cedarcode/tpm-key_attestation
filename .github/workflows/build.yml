@@ -137,8 +137,8 @@ jobs:
         bundler-cache: true
 
     - name: Manually set up Ruby
-      uses: ./.github/actions/install-ruby
       if: matrix.os == 'ubuntu-24.04'
+      uses: ./.github/actions/install-ruby
       with:
         version: ${{ matrix.ruby }}
         os: ${{ matrix.os }}

@@ -46,11 +46,11 @@ runs:
       id: bundler-cache
       uses: actions/cache@v4
       with:
-        path: vendor/bundle
-        key: bundler-${{ inputs.version }}-${{ inputs.os }}-${{ hashFiles('Gemfile', 'tpm-key_attestation.gemspec') }}
+        path: ./vendor/bundle
+        key: bundler-ruby-${{ inputs.version }}-${{ inputs.os }}-${{ hashFiles('Gemfile', 'tpm-key_attestation.gemspec') }}
 
     - name: Install dependencies
       shell: bash
       run: |
-        bundle config set --local path vendor/bundle
+        bundle config set --local path ./vendor/bundle
         bundle install

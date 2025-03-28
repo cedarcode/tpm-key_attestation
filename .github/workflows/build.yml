@@ -140,6 +140,7 @@ jobs:
       uses: ./.github/actions/install-ruby
       if: matrix.os == 'ubuntu-24.04'
       with:
-        version: ${{ matrix.ruby }}
+        version: matrix.ruby
+        os: matrix.os
 
     - run: bundle exec rspec

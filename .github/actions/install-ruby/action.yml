@@ -37,10 +37,20 @@ runs:
       run: |
         echo "~/rubies/ruby-${{ inputs.version }}/bin" >> $GITHUB_PATH
 
-    - name: Install Bundler (if Ruby <= 2.6)
-      if: startsWith(inputs.version, '2.5') || startsWith(inputs.version, '2.6')
+    - name: Install Bundler
       shell: bash
-      run: gem install bundler -v '~> 2.3.0'
+      run: |
+        case ${{ inputs.version }} in
+        2.7* | 3.*)
+          echo "Skipping Bundler installation for Ruby ${{ inputs.version }}"
+          ;;
+        2.5* | 2.6*)
+          gem install bundler -v '~> 2.3.0'
+          ;;
+        *)
+          echo "Don't know how to install Bundler for Ruby ${{ inputs.version }}"
+          ;;
+        esac
 
     - name: Cache Bundler Install
       id: bundler-cache

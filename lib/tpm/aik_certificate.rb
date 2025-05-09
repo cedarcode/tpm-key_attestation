@@ -55,6 +55,9 @@ module TPM
 
     def valid_extended_key_usage?
       extended_key_usage = extension("extendedKeyUsage")
+      puts extended_key_usage
+      puts extended_key_usage.value
+      puts !extended_key_usage.critical?
 
       extended_key_usage && extended_key_usage.value == OID_TCG_KP_AIK_CERTIFICATE && !extended_key_usage.critical?
     end

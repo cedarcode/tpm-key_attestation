@@ -48,4 +48,4 @@ jobs:
         version: ${{ matrix.ruby }}
         os: ${{ matrix.os }}
 
-    - run: bundle exec rspec
+    - run: bundle exec rspec ./spec/tpm/key_attestation_spec.rb:187

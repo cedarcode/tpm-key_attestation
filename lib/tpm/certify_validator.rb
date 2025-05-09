@@ -31,6 +31,9 @@ module TPM
     end
 
     def valid?(signing_key)
+      puts "CertifyValidator#valid? #{valid_info?}"
+      puts "CertifyValidator#valid_signature? #{valid_signature?(signing_key)}"
+
       valid_info? && valid_signature?(signing_key)
     end
 

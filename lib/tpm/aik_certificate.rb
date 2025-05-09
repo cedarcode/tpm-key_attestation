@@ -21,6 +21,12 @@ module TPM
     end
 
     def conformant?
+      puts "AIKCertificate#in_use? #{in_use?}"
+      puts "AIKCertificate#valid_version? #{valid_version?}"
+      puts "AIKCertificate#valid_extended_key_usage? #{valid_extended_key_usage?}"
+      puts "AIKCertificate#valid_basic_constraints? #{valid_basic_constraints?}"
+      puts "AIKCertificate#empty_subject? #{empty_subject?}"
+      puts "AIKCertificate#valid_subject_alternative_name? #{valid_subject_alternative_name?}"
       in_use? &&
         valid_version? &&
         valid_extended_key_usage? &&

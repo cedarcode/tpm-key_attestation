@@ -61,9 +61,9 @@ module TPM
     end
 
     def valid?
-      puts certify_validator.valid?(aik_certificate.public_key)
-      puts aik_certificate.conformant?
-      puts trustworthy?
+      puts "CertifyValidator #{certify_validator.valid?(aik_certificate.public_key)}"
+      puts "AIKCertificate conformant? #{aik_certificate.conformant?}"
+      puts "Trustworthy? #{trustworthy?}"
 
       certify_validator.valid?(aik_certificate.public_key) &&
         aik_certificate.conformant? &&

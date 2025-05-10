@@ -76,6 +76,12 @@ def create_certificate(key, root_certificate, root_key)
     extension_factory.create_extension("subjectAltName", "ASN1:SEQUENCE:dir_seq", certificate_san_critical),
   ]
 
+  certificate.extensions.each do |ext|
+    puts "Extension = #{ext.to_s}"
+  end
+
+  puts ""
+
   certificate.sign(root_key, OpenSSL::Digest.new('SHA256'))
 
   certificate

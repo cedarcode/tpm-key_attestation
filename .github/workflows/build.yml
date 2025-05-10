@@ -50,4 +50,9 @@ jobs:
         version: ${{ matrix.ruby }}
         os: ${{ matrix.os }}
 
+    - name: Show versions
+      run: |
+        ruby -v
+        openssl version
+
     - run: bundle exec rspec ./spec/tpm/key_attestation_spec.rb:187

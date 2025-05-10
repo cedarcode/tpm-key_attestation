@@ -185,14 +185,10 @@ RSpec.describe TPM::KeyAttestation do
       let(:curve_id) { TPM::ECC_NIST_P256 }
 
       it "returns true" do
-        puts "Valid KeyAttestation #{key_attestation.valid?}"
         expect(key_attestation).to be_valid
 
-        puts "KeyAttestation key #{key_attestation.key}"
         expect(key_attestation.key).to be_a(OpenSSL::PKey::EC)
-        puts "KeyAttestation key group curve name #{key_attestation.key.group.curve_name}"
         expect(key_attestation.key.group.curve_name).to eq("prime256v1")
-        puts "KeyAttestation key public key #{key_attestation.key.public_key}"
         expect(key_attestation.key.public_key).to eq(attested_key.public_key)
       end
 

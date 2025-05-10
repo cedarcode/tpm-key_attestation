@@ -17,8 +17,10 @@ jobs:
       matrix:
         os:
           - windows-latest
+          - ubuntu-24.04
         ruby:
           - '3.3'
+          - '2.7'
         gemfile:
           - openssl_3_3
     env:

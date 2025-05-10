@@ -21,12 +21,6 @@ module TPM
     end
 
     def conformant?
-      puts "AIKCertificate#in_use? #{in_use?}"
-      puts "AIKCertificate#valid_version? #{valid_version?}"
-      puts "AIKCertificate#valid_extended_key_usage? #{valid_extended_key_usage?}"
-      puts "AIKCertificate#valid_basic_constraints? #{valid_basic_constraints?}"
-      puts "AIKCertificate#empty_subject? #{empty_subject?}"
-
       in_use? &&
         valid_version? &&
         valid_extended_key_usage? &&
@@ -55,6 +49,9 @@ module TPM
 
     def valid_extended_key_usage?
       extended_key_usage = extension("extendedKeyUsage")
+      puts "extendedKeyUsage = #{extended_key_usage}"
+      puts "extendedKeyUsage.critical? = #{extended_key_usage.critical?}"
+      puts "extendedKeyUsage.value = #{extended_key_usage.value}"
 
       extended_key_usage && extended_key_usage.value == OID_TCG_KP_AIK_CERTIFICATE && !extended_key_usage.critical?
     end

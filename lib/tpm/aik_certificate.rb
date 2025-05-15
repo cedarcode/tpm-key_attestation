@@ -7,14 +7,15 @@ require "tpm/constants"
 module TPM
   # Section 3.2 in https://www.trustedcomputinggroup.org/wp-content/uploads/Credential_Profile_EK_V2.0_R14_published.pdf
   class AIKCertificate < SimpleDelegator
+    OPENSSL_VERSION = OpenSSL::OPENSSL_LIBRARY_VERSION.match(/\d+\.\d+\.\d+/).to_s
     ASN_V3 = 2
     EMPTY_NAME = OpenSSL::X509::Name.new([]).freeze
     SAN_DIRECTORY_NAME = 4
     OID_TCG = "2.23.133"
-    OID_TCG_AT_TPM_MANUFACTURER = "#{OID_TCG}.2.1"
-    OID_TCG_AT_TPM_MODEL = "#{OID_TCG}.2.2"
-    OID_TCG_AT_TPM_VERSION = "#{OID_TCG}.2.3"
-    OID_TCG_KP_AIK_CERTIFICATE = "#{OID_TCG}.8.3"
+    OID_TCG_AT_TPM_MANUFACTURER = OPENSSL_VERSION >= "3.5.0" ? "tcg-at-tpmManufacturer" : "#{OID_TCG}.2.1"
+    OID_TCG_AT_TPM_MODEL = OPENSSL_VERSION >= "3.5.0" ? "tcg-at-tpmModel" : "#{OID_TCG}.2.2"
+    OID_TCG_AT_TPM_VERSION = OPENSSL_VERSION >= "3.5.0" ? "tcg-at-tpmVersion" : "#{OID_TCG}.2.3"
+    OID_TCG_KP_AIK_CERTIFICATE = OPENSSL_VERSION >= "3.5.0" ? "Attestation Identity Key Certificate" : "#{OID_TCG}.8.3"
 
     def self.from_der(certificate_der)
       new(OpenSSL::X509::Certificate.new(certificate_der))

@@ -142,5 +142,9 @@ jobs:
       with:
         version: ${{ matrix.ruby }}
         os: ${{ matrix.os }}
+    - name: Log versions
+      run: |
+        ruby -v
+        openssl version
 
     - run: bundle exec rspec

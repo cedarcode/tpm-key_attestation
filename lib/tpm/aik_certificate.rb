@@ -23,6 +23,10 @@ module TPM
       OID_TCG_KP_AIK_CERTIFICATE = "#{OID_TCG}.8.3"
     end
 
+    puts "OPENSSL_VERSION_NUMBER: #{OpenSSL::OPENSSL_VERSION_NUMBER.to_s(16)}"
+    puts "OPENSSL_VERSION: #{OpenSSL::OPENSSL_VERSION}"
+    puts "OPENSSL_LIBRARY_VERSION: #{OpenSSL::OPENSSL_LIBRARY_VERSION}"
+
     def self.from_der(certificate_der)
       new(OpenSSL::X509::Certificate.new(certificate_der))
     end

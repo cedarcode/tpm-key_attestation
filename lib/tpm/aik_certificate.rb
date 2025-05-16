@@ -3,6 +3,7 @@
 require "delegate"
 require "openssl"
 require "tpm/constants"
+require "tpm/openssl_helper"
 
 module TPM
   # Section 3.2 in https://www.trustedcomputinggroup.org/wp-content/uploads/Credential_Profile_EK_V2.0_R14_published.pdf
@@ -10,11 +11,19 @@ module TPM
     ASN_V3 = 2
     EMPTY_NAME = OpenSSL::X509::Name.new([]).freeze
     SAN_DIRECTORY_NAME = 4
-    OID_TCG = "2.23.133"
-    OID_TCG_AT_TPM_MANUFACTURER = "#{OID_TCG}.2.1"
-    OID_TCG_AT_TPM_MODEL = "#{OID_TCG}.2.2"
-    OID_TCG_AT_TPM_VERSION = "#{OID_TCG}.2.3"
-    OID_TCG_KP_AIK_CERTIFICATE = "#{OID_TCG}.8.3"
+
+    if TPM::OpenSSLHelper.running_openssl_version_35_or_up?
+      OID_TCG_AT_TPM_MANUFACTURER = "tcg-at-tpmManufacturer"
+      OID_TCG_AT_TPM_MODEL = "tcg-at-tpmModel"
+      OID_TCG_AT_TPM_VERSION = "tcg-at-tpmVersion"
+      OID_TCG_KP_AIK_CERTIFICATE = "Attestation Identity Key Certificate"
+    else
+      OID_TCG = "2.23.133"
+      OID_TCG_AT_TPM_MANUFACTURER = "#{OID_TCG}.2.1"
+      OID_TCG_AT_TPM_MODEL = "#{OID_TCG}.2.2"
+      OID_TCG_AT_TPM_VERSION = "#{OID_TCG}.2.3"
+      OID_TCG_KP_AIK_CERTIFICATE = "#{OID_TCG}.8.3"
+    end
 
     def self.from_der(certificate_der)
       new(OpenSSL::X509::Certificate.new(certificate_der))

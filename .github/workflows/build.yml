@@ -18,7 +18,7 @@ jobs:
         os:
           - windows-2025
         ruby:
-          - '3.4'
+          - '3.4.3'
         gemfile:
           - openssl_3_0
     env:

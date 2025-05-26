@@ -114,6 +114,9 @@ jobs:
           - ruby: '3.4'
             gemfile: openssl_2_1
             os: windows-latest
+          - ruby: '3.4'
+            gemfile: openssl_3_0
+            os: windows-latest
           - ruby: '2.4'
             os: ubuntu-24.04
     env:

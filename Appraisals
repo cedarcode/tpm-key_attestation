@@ -9,7 +9,7 @@ appraise "openssl_2_1" do
 end
 
 appraise "openssl_3_0" do
-  gem "openssl", git: "https://github.com/nicolastemciuc/openssl", branch: "v3.0.3"
+  gem "openssl", git: "https://github.com/nicolastemciuc/openssl", branch: "v3.0.3.1"
 end
 
 appraise "openssl_3_1" do

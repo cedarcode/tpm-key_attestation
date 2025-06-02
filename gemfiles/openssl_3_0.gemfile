@@ -7,6 +7,6 @@ gem "byebug", "~> 11.0"
 gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
 gem "rubocop", "~> 1"
-gem "openssl", git: "https://github.com/nicolastemciuc/openssl", branch: "v3.0.3"
+gem "openssl", git: "https://github.com/nicolastemciuc/openssl", branch: "v3.0.3.1"
 
 gemspec path: "../"

@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.14.1] - 2025-05-23
+
+### Fixed
+
+- Support for OpenSSL 3.5+ `OID` values returned from the extensions created by `OpenSSL::X509::ExtensionFactory`. [@nicolastemciuc]
+
 ## [v0.14.0] - 2025-02-06
 
 - Handle incompatibility between `parameters` and `unique` in `TPublic`. [@nicolastemciuc], [@santiagorodriguez96]

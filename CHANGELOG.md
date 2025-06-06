@@ -4,8 +4,7 @@
 
 ### Fixed
 
-- Expect different `OID` values from the extensions created by `OpenSSL::X509::ExtensionFactory`
-  when using `OpenSSL >= 3.5.0` [@nicolastemciuc]
+- Support for OpenSSL 3.5+ `OID` values returned from the extensions created by `OpenSSL::X509::ExtensionFactory`. [@nicolastemciuc]
 
 ## [v0.14.0] - 2025-02-06
 

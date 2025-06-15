@@ -99,6 +99,8 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.14.1]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.0...v0.14.1/
+[v0.14.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.13.1...v0.14.0/
 [v0.13.1]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.13.0...v0.13.1/
 [v0.13.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.12.1...v0.13.0/
 [v0.12.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.11.0...v0.12.0/

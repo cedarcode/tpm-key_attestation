@@ -1,6 +1,6 @@
 # tpm-key_attestation
 
-TPM Key Attestation utitlies
+TPM Key Attestation utilities
 
 [![Gem](https://img.shields.io/gem/v/tpm-key_attestation.svg?style=flat-square&color=informational)](https://rubygems.org/gems/tpm-key_attestation)
 [![Actions Build](https://github.com/cedarcode/tpm-key_attestation/workflows/build/badge.svg)](https://github.com/cedarcode/tpm-key_attestation/actions)

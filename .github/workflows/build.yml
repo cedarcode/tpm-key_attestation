@@ -33,7 +33,7 @@ jobs:
         os:
           - ubuntu-24.04
           - windows-latest
-          - macos-13
+          - macos-15
         ruby:
           - '3.4'
           - '3.3'
@@ -74,16 +74,16 @@ jobs:
             gemfile: openssl_3_3
           - ruby: '3.1'
             gemfile: openssl_2_2
-            os: macos-13
+            os: macos-15
           - ruby: '3.1'
             gemfile: openssl_2_1
-            os: macos-13
+            os: macos-15
           - ruby: '3.2'
             gemfile: openssl_2_2
-            os: macos-13
+            os: macos-15
           - ruby: '3.2'
             gemfile: openssl_2_1
-            os: macos-13
+            os: macos-15
           - ruby: '3.2'
             gemfile: openssl_2_2
             os: windows-latest
@@ -92,10 +92,10 @@ jobs:
             os: windows-latest
           - ruby: '3.3'
             gemfile: openssl_2_2
-            os: macos-13
+            os: macos-15
           - ruby: '3.3'
             gemfile: openssl_2_1
-            os: macos-13
+            os: macos-15
           - ruby: '3.3'
             gemfile: openssl_2_2
             os: windows-latest
@@ -104,10 +104,10 @@ jobs:
             os: windows-latest
           - ruby: '3.4'
             gemfile: openssl_2_2
-            os: macos-13
+            os: macos-15
           - ruby: '3.4'
             gemfile: openssl_2_1
-            os: macos-13
+            os: macos-15
           - ruby: '3.4'
             gemfile: openssl_2_2
             os: windows-latest

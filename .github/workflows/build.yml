@@ -53,6 +53,10 @@ jobs:
           - openssl_3_3
         exclude:
           - ruby: '2.4'
+            os: macos-15
+          - ruby: '2.5'
+            os: macos-15
+          - ruby: '2.4'
             gemfile: openssl_3_0
           - ruby: '2.5'
             gemfile: openssl_3_0

@@ -35,6 +35,7 @@ jobs:
           - windows-latest
           - macos-15
         ruby:
+          - '4.0'
           - '3.4'
           - '3.3'
           - '3.2'
@@ -125,6 +126,21 @@ jobs:
             gemfile: openssl_2_1
             os: windows-latest
           - ruby: '3.4'
+            gemfile: openssl_3_0
+            os: windows-latest
+          - ruby: '4.0'
+            gemfile: openssl_2_2
+            os: macos-15
+          - ruby: '4.0'
+            gemfile: openssl_2_1
+            os: macos-15
+          - ruby: '4.0'
+            gemfile: openssl_2_2
+            os: windows-latest
+          - ruby: '4.0'
+            gemfile: openssl_2_1
+            os: windows-latest
+          - ruby: '4.0'
             gemfile: openssl_3_0
             os: windows-latest
           - ruby: '2.4'

@@ -13,18 +13,12 @@ RSpec.describe TPM::PublicArea do
         ].pack("H*")
       end
 
-      it "parses without error" do
+      it "returns true" do
         expect(described_class.new(pub_area).ecc?).to be true
       end
     end
 
     context "when the ECC scheme is TPM_ALG_ECDSA" do
-      # TPMT_ECC_SCHEME is a selector followed by a [scheme]details union whose
-      # size depends on the selector. TPM_ALG_ECDSA's details are a
-      # TPMS_SCHEME_HASH (an extra 2-byte hashAlg) that TPM_ALG_NULL doesn't
-      # have. A parser that always skips it desyncs by 2 bytes for every
-      # field that follows. Vector from issue #59 (a real ES256 TPM
-      # attestation pubArea from the FIDO conformance tool).
       let(:pub_area) do
         [
           "0023000b0006047200000010001800" \
@@ -33,7 +27,7 @@ RSpec.describe TPM::PublicArea do
         ].pack("H*")
       end
 
-      it "parses without raising IOError" do
+      it "returns true" do
         expect(described_class.new(pub_area).ecc?).to be true
       end
     end

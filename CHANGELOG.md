@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.14.2] - 2026-07-24
+
+### Fixed
+
+- `TPMS_ECC_PARMS` parsing for non-NULL ECC schemes. [#60](https://github.com/cedarcode/tpm-key_attestation/pull/60) [@MayzrBot](https://github.com/MayzrBot)
+
 ## [v0.14.1] - 2025-05-23
 
 ### Fixed
@@ -99,6 +105,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::EKCertificate` wrapper
 - `TPM::SAttest` wrapper
 
+[v0.14.2]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.1...v0.14.2/
 [v0.14.1]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.0...v0.14.1/
 [v0.14.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.13.1...v0.14.0/
 [v0.13.1]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.13.0...v0.13.1/

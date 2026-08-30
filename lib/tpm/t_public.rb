@@ -113,7 +113,9 @@ module TPM
           asn1 = OpenSSL::ASN1::Sequence(
             [
               OpenSSL::ASN1::Integer.new(bn(n)),
-              OpenSSL::ASN1::Integer.new(bn(RSA_KEY_DEFAULT_PUBLIC_EXPONENT)),
+              OpenSSL::ASN1::Integer.new(
+                bn(parameters.exponent.zero? ? RSA_KEY_DEFAULT_PUBLIC_EXPONENT : parameters.exponent.to_i)
+              ),
             ]
           )
 

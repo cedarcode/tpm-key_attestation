@@ -6,7 +6,9 @@ require "tpm/t_public"
 module TPM
   TPM_TO_OPENSSL_HASH_ALG = {
     TPM::ALG_SHA1 => "SHA1",
-    TPM::ALG_SHA256 => "SHA256"
+    TPM::ALG_SHA256 => "SHA256",
+    TPM::ALG_SHA384 => "SHA384",
+    TPM::ALG_SHA512 => "SHA512"
   }.freeze
 
   class PublicArea

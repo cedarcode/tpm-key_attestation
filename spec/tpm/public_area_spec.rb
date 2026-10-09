@@ -3,6 +3,38 @@
 require "tpm/public_area"
 
 RSpec.describe TPM::PublicArea do
+  describe "#name" do
+    let(:pub_area) do
+      t_public = TPM::TPublic.new
+      t_public.alg_type = TPM::ALG_RSA
+      t_public.name_alg = name_alg
+      t_public.parameters.symmetric = TPM::ALG_NULL
+      t_public.parameters.scheme = TPM::ALG_RSASSA
+      t_public.parameters.key_bits = 1024
+      t_public.parameters.exponent = 0x00
+      t_public.unique.buffer = OpenSSL::Random.random_bytes(128)
+
+      t_public.to_binary_s
+    end
+
+    {
+      TPM::ALG_SHA1 => "SHA1",
+      TPM::ALG_SHA256 => "SHA256",
+      TPM::ALG_SHA384 => "SHA384",
+      TPM::ALG_SHA512 => "SHA512"
+    }.each do |alg, digest_name|
+      context "when nameAlg is #{digest_name}" do
+        let(:name_alg) { alg }
+
+        it "returns nameAlg followed by the #{digest_name} digest of the public area" do
+          expected_name = [alg].pack("n") + OpenSSL::Digest.digest(digest_name, pub_area)
+
+          expect(described_class.new(pub_area).name).to eq(expected_name)
+        end
+      end
+    end
+  end
+
   describe "#ecc?" do
     context "when the ECC scheme is TPM_ALG_NULL" do
       let(:pub_area) do

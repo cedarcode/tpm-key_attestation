@@ -79,6 +79,24 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
+    context "when nameAlg is SHA-384" do
+      let(:name_alg) { TPM::ALG_SHA384 }
+      let(:certify_info_attested_name_digest) { OpenSSL::Digest::SHA384.digest(certified_key) }
+
+      it "returns true" do
+        expect(key_attestation).to be_valid
+      end
+    end
+
+    context "when nameAlg is SHA-512" do
+      let(:name_alg) { TPM::ALG_SHA512 }
+      let(:certify_info_attested_name_digest) { OpenSSL::Digest::SHA512.digest(certified_key) }
+
+      it "returns true" do
+        expect(key_attestation).to be_valid
+      end
+    end
+
     context "when using a certificate signed by default trusted certificates" do
       let(:trusted_certificates) { TPM::KeyAttestation::TRUSTED_CERTIFICATES.dup }
 

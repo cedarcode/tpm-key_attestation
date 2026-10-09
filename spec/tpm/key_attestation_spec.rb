@@ -61,11 +61,12 @@ RSpec.describe TPM::KeyAttestation do
     t_public.parameters.symmetric = TPM::ALG_NULL
     t_public.parameters.scheme = TPM::ALG_RSASSA
     t_public.parameters.key_bits = attested_key_length
-    t_public.parameters.exponent = 0x00
+    t_public.parameters.exponent = t_public_exponent
     t_public.unique.buffer = attested_key.params["n"].to_s(2)
 
     t_public.to_binary_s
   end
+  let(:t_public_exponent) { 0x00 }
 
   let(:hash_function) { "SHA256" }
   let(:qualifying_data) { OpenSSL::Digest.digest('SHA256', "qualifying-data") }
@@ -329,6 +330,25 @@ RSpec.describe TPM::KeyAttestation do
 
       it "returns a public RSA key with correct RSA exponent" do
         expect(key_attestation.key.e).to eq attested_key.e
+      end
+    end
+
+    context "when the exponent parameter from pubArea is not the default" do
+      let(:attested_key) { create_rsa_key(t_public_exponent) }
+      let(:t_public_exponent) { 3 }
+
+      it "returns a public RSA key with the exponent from pubArea" do
+        expect(key_attestation.key.e).to eq 3
+      end
+    end
+
+    [1, 2, 4].each do |invalid_exponent|
+      context "when the exponent parameter from pubArea is #{invalid_exponent}" do
+        let(:t_public_exponent) { invalid_exponent }
+
+        it "returns nil" do
+          expect(key_attestation.key).to be nil
+        end
       end
     end
 

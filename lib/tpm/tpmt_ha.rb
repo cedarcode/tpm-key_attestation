@@ -7,6 +7,8 @@ module TPM
     BYTE_LENGTH = 8
     DIGEST_LENGTH_SHA1 = 160
     DIGEST_LENGTH_SHA256 = 256
+    DIGEST_LENGTH_SHA384 = 384
+    DIGEST_LENGTH_SHA512 = 512
 
     endian :big
 
@@ -15,6 +17,8 @@ module TPM
     choice :digest, selection: :hash_alg do
       string TPM::ALG_SHA1, length: DIGEST_LENGTH_SHA1 / BYTE_LENGTH
       string TPM::ALG_SHA256, length: DIGEST_LENGTH_SHA256 / BYTE_LENGTH
+      string TPM::ALG_SHA384, length: DIGEST_LENGTH_SHA384 / BYTE_LENGTH
+      string TPM::ALG_SHA512, length: DIGEST_LENGTH_SHA512 / BYTE_LENGTH
     end
   end
 end

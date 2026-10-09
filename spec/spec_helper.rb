@@ -16,10 +16,10 @@ RSpec.configure do |config|
   end
 end
 
-def create_rsa_key
+def create_rsa_key(public_exponent = TPM::TPublic::RSA_KEY_DEFAULT_PUBLIC_EXPONENT)
   key_bits = 1024 # NOTE: Use 2048 or more in real life. This choice is just for fast test runs.
 
-  OpenSSL::PKey::RSA.new(key_bits)
+  OpenSSL::PKey::RSA.new(key_bits, public_exponent)
 end
 
 def create_ecc_key(curve_id = TPM::ECC_NIST_P256)

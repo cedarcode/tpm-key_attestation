@@ -108,18 +108,32 @@ module TPM
       when TPM::ALG_RSASSA, TPM::ALG_RSAPSS, TPM::ALG_NULL
         n = unique.buffer.value
 
-        if parameters.key_bits / BYTE_LENGTH == n.size
+        if parameters.key_bits / BYTE_LENGTH == n.size && valid_rsa_exponent?
           # PKCS#1 RSAPublicKey
           asn1 = OpenSSL::ASN1::Sequence(
             [
               OpenSSL::ASN1::Integer.new(bn(n)),
-              OpenSSL::ASN1::Integer.new(bn(RSA_KEY_DEFAULT_PUBLIC_EXPONENT)),
+              OpenSSL::ASN1::Integer.new(bn(rsa_exponent)),
             ]
           )
 
           OpenSSL::PKey::RSA.new(asn1.to_der)
         end
       end
+    end
+
+    # Section 12.2.3.5 in https://trustedcomputinggroup.org/wp-content/uploads/TPM-2.0-1.83-Part-2-Structures.pdf
+    # Zero indicates the default exponent of 2^16 + 1
+    def rsa_exponent
+      if parameters.exponent.zero?
+        RSA_KEY_DEFAULT_PUBLIC_EXPONENT
+      else
+        parameters.exponent.to_i
+      end
+    end
+
+    def valid_rsa_exponent?
+      rsa_exponent > 2 && rsa_exponent.odd?
     end
 
     def bn(data)

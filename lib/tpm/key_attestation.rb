@@ -89,7 +89,7 @@ module TPM
     def trust_store
       @trust_store ||=
         OpenSSL::X509::Store.new.tap do |trust_store|
-          trusted_certificates.uniq(&:serial).each { |trusted_certificate| trust_store.add_cert(trusted_certificate) }
+          trusted_certificates.uniq(&:to_der).each { |trusted_certificate| trust_store.add_cert(trusted_certificate) }
         end
     end
 

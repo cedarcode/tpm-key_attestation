@@ -69,10 +69,10 @@ module TPM
     def valid_subject_alternative_name?
       if san_extension
         san_extension.critical? &&
-          !tpm_manufacturer.empty? &&
+          !tpm_manufacturer.to_s.empty? &&
           TPM::VENDOR_IDS[tpm_manufacturer] &&
-          !tpm_model.empty? &&
-          !tpm_version.empty?
+          !tpm_model.to_s.empty? &&
+          !tpm_version.to_s.empty?
       end
     end
 
@@ -81,21 +81,19 @@ module TPM
     end
 
     def tpm_manufacturer
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_MANUFACTURER).at(1)
-      end
+      san_attribute(OID_TCG_AT_TPM_MANUFACTURER)
     end
 
     def tpm_model
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_MODEL).at(1)
-      end
+      san_attribute(OID_TCG_AT_TPM_MODEL)
     end
 
     def tpm_version
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_VERSION).at(1)
-      end
+      san_attribute(OID_TCG_AT_TPM_VERSION)
+    end
+
+    def san_attribute(oid)
+      san_name&.assoc(oid)&.at(1)
     end
 
     def san_name
@@ -110,8 +108,10 @@ module TPM
             val.tag_class == :CONTEXT_SPECIFIC && val.tag == SAN_DIRECTORY_NAME
           end
 
-        OpenSSL::X509::Name.new(directory_name.value.first).to_a
+        OpenSSL::X509::Name.new(directory_name.value.first).to_a if directory_name
       end
+    rescue OpenSSL::OpenSSLError, NoMethodError, TypeError
+      nil
     end
 
     def san_extension

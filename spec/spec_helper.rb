@@ -81,8 +81,9 @@ def create_certificate(key, root_certificate, root_key)
   certificate
 end
 
-def create_root_certificate(key)
+def create_root_certificate(key, serial_number: 0)
   certificate = OpenSSL::X509::Certificate.new
+  certificate.serial = serial_number
   common_name = "Root-#{rand(1_000_000)}"
 
   certificate.subject = OpenSSL::X509::Name.new([["CN", common_name]])

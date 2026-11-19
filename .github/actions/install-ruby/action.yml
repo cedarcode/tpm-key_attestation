@@ -41,8 +41,13 @@ runs:
       shell: bash
       run: |
         case ${{ inputs.version }} in
-        2.7* | 3.*)
+        3.*)
           echo "Skipping Bundler installation for Ruby ${{ inputs.version }}"
+          ;;
+        2.7*)
+          # Ruby 2.7 ships Bundler 2.1, which picks platform-specific gems without
+          # checking their Ruby requirement (e.g. prism 2.x native builds need Ruby >= 3.3).
+          gem install bundler -v '~> 2.4.0'
           ;;
         2.5* | 2.6*)
           gem install bundler -v '~> 2.3.0'

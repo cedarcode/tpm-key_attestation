@@ -16,12 +16,11 @@ RSpec.describe "TPM::AIKCertificate" do
       certificate.public_key = key
 
       extension_factory = OpenSSL::X509::ExtensionFactory.new
-      extension_factory.config = certificate_san_config
 
       certificate.extensions = [
         extension_factory.create_extension("basicConstraints", certificate_basic_constraints, true),
         extension_factory.create_extension("extendedKeyUsage", certificate_extended_key_usage),
-        extension_factory.create_extension("subjectAltName", "ASN1:SEQUENCE:dir_seq", certificate_san_critical),
+        certificate_san_extension,
       ]
 
       certificate.sign(key, OpenSSL::Digest.new('SHA256'))
@@ -41,7 +40,22 @@ RSpec.describe "TPM::AIKCertificate" do
     let(:certificate_san_manufacturer) { "id:4E544300" }
     let(:certificate_san_model) { "TPM test model" }
     let(:certificate_san_version) { "id:42" }
+    let(:certificate_san_attributes) do
+      [
+        ["2.23.133.2.1", certificate_san_manufacturer],
+        ["2.23.133.2.2", certificate_san_model],
+        ["2.23.133.2.3", certificate_san_version],
+      ].reject { |_oid, value| value.nil? }
+    end
     let(:certificate_san_config) do
+      set_entries =
+        certificate_san_attributes.each_index.map { |index| "seq.#{index + 1} = SEQUENCE:dir_seq_#{index + 1}" }
+
+      attribute_sections =
+        certificate_san_attributes.each_with_index.map do |(oid, value), index|
+          "[dir_seq_#{index + 1}]\noid=OID:#{oid}\nstr=UTF8:\"#{value}\""
+        end
+
       OpenSSL::Config.parse(<<~OPENSSL_CONF)
         [dir_seq]
         seq = EXPLICIT:4,SEQUENCE:dir_seq_seq
@@ -50,22 +64,16 @@ RSpec.describe "TPM::AIKCertificate" do
         set = SET:dir_set
 
         [dir_set]
-        seq.1 = SEQUENCE:dir_seq_1
-        seq.2 = SEQUENCE:dir_seq_2
-        seq.3 = SEQUENCE:dir_seq_3
+        #{set_entries.join("\n")}
 
-        [dir_seq_1]
-        oid=OID:2.23.133.2.1
-        str=UTF8:"#{certificate_san_manufacturer}"
-
-        [dir_seq_2]
-        oid=OID:2.23.133.2.2
-        str=UTF8:"#{certificate_san_model}"
-
-        [dir_seq_3]
-        oid=OID:2.23.133.2.3
-        str=UTF8:"#{certificate_san_version}"
+        #{attribute_sections.join("\n\n")}
       OPENSSL_CONF
+    end
+    let(:certificate_san_extension) do
+      extension_factory = OpenSSL::X509::ExtensionFactory.new
+      extension_factory.config = certificate_san_config
+
+      extension_factory.create_extension("subjectAltName", "ASN1:SEQUENCE:dir_seq", certificate_san_critical)
     end
 
     let(:aik_certificate) { TPM::AIKCertificate.new(certificate) }
@@ -154,6 +162,92 @@ RSpec.describe "TPM::AIKCertificate" do
 
         it "returns false" do
           expect(aik_certificate).not_to be_conformant
+        end
+      end
+
+      context "because the manufacturer is missing" do
+        let(:certificate_san_manufacturer) { nil }
+
+        it "returns false" do
+          expect(aik_certificate).not_to be_conformant
+        end
+      end
+
+      context "because the model is missing" do
+        let(:certificate_san_model) { nil }
+
+        it "returns false" do
+          expect(aik_certificate).not_to be_conformant
+        end
+      end
+
+      context "because the version is missing" do
+        let(:certificate_san_version) { nil }
+
+        it "returns false" do
+          expect(aik_certificate).not_to be_conformant
+        end
+      end
+
+      context "because it has no directory name" do
+        let(:certificate_san_extension) do
+          OpenSSL::X509::ExtensionFactory.new.create_extension("subjectAltName", "DNS:example.com", true)
+        end
+
+        it "returns false" do
+          expect(aik_certificate).not_to be_conformant
+        end
+      end
+
+      context "because it is malformed" do
+        let(:certificate_san_extension) { OpenSSL::X509::Extension.new("subjectAltName", san_der, true) }
+
+        context "with invalid DER" do
+          let(:san_der) { "\x30\x05\x01".b }
+
+          it "returns false" do
+            expect(aik_certificate).not_to be_conformant
+          end
+        end
+
+        context "with a value that is not a sequence" do
+          let(:san_der) { OpenSSL::ASN1::OctetString("TPM").to_der }
+
+          it "returns false" do
+            expect(aik_certificate).not_to be_conformant
+          end
+        end
+
+        context "with a primitive directory name" do
+          let(:san_der) do
+            OpenSSL::ASN1::Sequence([OpenSSL::ASN1::ASN1Data.new("TPM", 4, :CONTEXT_SPECIFIC)]).to_der
+          end
+
+          it "returns false" do
+            expect(aik_certificate).not_to be_conformant
+          end
+        end
+
+        context "with an empty directory name" do
+          let(:san_der) do
+            OpenSSL::ASN1::Sequence([OpenSSL::ASN1::ASN1Data.new([], 4, :CONTEXT_SPECIFIC)]).to_der
+          end
+
+          it "returns false" do
+            expect(aik_certificate).not_to be_conformant
+          end
+        end
+
+        context "with a directory name that does not contain a name" do
+          let(:san_der) do
+            OpenSSL::ASN1::Sequence(
+              [OpenSSL::ASN1::ASN1Data.new([OpenSSL::ASN1::Integer(1)], 4, :CONTEXT_SPECIFIC)]
+            ).to_der
+          end
+
+          it "returns false" do
+            expect(aik_certificate).not_to be_conformant
+          end
         end
       end
     end

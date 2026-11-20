@@ -7,6 +7,10 @@
 - Support RSA keys with non-default exponents in `pubArea`. Invalid exponents make `TPM::KeyAttestation#key` return `nil`. [#65](https://github.com/cedarcode/tpm-key_attestation/pull/65) [@OskarEichler](https://github.com/OskarEichler) [@santiagorodriguez96]
 - Support for SHA-384 and SHA-512 as `nameAlg`. [#66](https://github.com/cedarcode/tpm-key_attestation/pull/66) [@OskarEichler](https://github.com/OskarEichler)
 
+### Changed
+
+- Exclude the development `Gemfile` and `Gemfile.lock` from the packaged gem. ([#75](https://github.com/cedarcode/tpm-key_attestation/pull/75))
+
 ## [v0.14.2] - 2026-07-24
 
 ### Fixed

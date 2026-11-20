@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [v0.14.3] - 2026-11-20
+
 ### Added
 
 - Support RSA keys with non-default exponents in `pubArea`. Invalid exponents make `TPM::KeyAttestation#key` return `nil`. [#65](https://github.com/cedarcode/tpm-key_attestation/pull/65) [@OskarEichler](https://github.com/OskarEichler) [@santiagorodriguez96]
@@ -117,6 +119,7 @@ replacement of `JOSE` format `algorithm` string
 - `TPM::SAttest` wrapper
 
 [Unreleased]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.2...HEAD/
+[v0.14.3]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.2...v0.14.3/
 [v0.14.2]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.1...v0.14.2/
 [v0.14.1]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.14.0...v0.14.1/
 [v0.14.0]: https://github.com/cedarcode/tpm-key_attestation/compare/v0.13.1...v0.14.0/

@@ -69,11 +69,22 @@ module TPM
     def valid_subject_alternative_name?
       if san_extension
         san_extension.critical? &&
-          !tpm_manufacturer.empty? &&
-          TPM::VENDOR_IDS[tpm_manufacturer] &&
-          !tpm_model.empty? &&
-          !tpm_version.empty?
+          valid_tpm_manufacturer? &&
+          valid_tpm_model? &&
+          valid_tpm_version?
       end
+    end
+
+    def valid_tpm_manufacturer?
+      TPM::VENDOR_IDS.key?(tpm_manufacturer)
+    end
+
+    def valid_tpm_model?
+      tpm_model && !tpm_model.empty?
+    end
+
+    def valid_tpm_version?
+      tpm_version && !tpm_version.empty?
     end
 
     def extension(oid)
@@ -81,37 +92,44 @@ module TPM
     end
 
     def tpm_manufacturer
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_MANUFACTURER).at(1)
-      end
+      san_attributes[OID_TCG_AT_TPM_MANUFACTURER]
     end
 
     def tpm_model
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_MODEL).at(1)
-      end
+      san_attributes[OID_TCG_AT_TPM_MODEL]
     end
 
     def tpm_version
-      if san_name
-        san_name.assoc(OID_TCG_AT_TPM_VERSION).at(1)
-      end
+      san_attributes[OID_TCG_AT_TPM_VERSION]
     end
 
-    def san_name
-      if san_extension
-        san_asn1 =
-          OpenSSL::ASN1.decode(san_extension).find do |val|
-            val.tag_class == :UNIVERSAL && val.tag == OpenSSL::ASN1::OCTET_STRING
-          end
+    def san_attributes
+      @san_attributes ||= parse_san_attributes
+    end
 
-        directory_name =
-          OpenSSL::ASN1.decode(san_asn1.value).find do |val|
-            val.tag_class == :CONTEXT_SPECIFIC && val.tag == SAN_DIRECTORY_NAME
-          end
+    def parse_san_attributes
+      return {} unless san_extension
 
-        OpenSSL::X509::Name.new(directory_name.value.first).to_a
+      san_asn1 =
+        OpenSSL::ASN1.decode(san_extension).find do |val|
+          val.tag_class == :UNIVERSAL && val.tag == OpenSSL::ASN1::OCTET_STRING
+        end
+
+      general_names = OpenSSL::ASN1.decode(san_asn1.value)
+      return {} unless general_names.is_a?(OpenSSL::ASN1::Sequence)
+
+      directory_name =
+        general_names.find do |val|
+          val.tag_class == :CONTEXT_SPECIFIC && val.tag == SAN_DIRECTORY_NAME &&
+            val.value.is_a?(Array) && !val.value.empty?
+        end
+      return {} unless directory_name
+
+      OpenSSL::X509::Name.new(directory_name.value.first).to_a.each_with_object({}) do |(oid, value, _type), attributes|
+        attributes[oid] ||= value
       end
+    rescue OpenSSL::OpenSSLError
+      {}
     end
 
     def san_extension

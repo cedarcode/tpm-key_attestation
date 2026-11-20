@@ -158,6 +158,37 @@ RSpec.describe TPM::KeyAttestation do
       end
     end
 
+    context "when two certificates in trusted_certificates have the same serial number" do
+      context "and they are different certificates" do
+        let(:root_certificate) { create_root_certificate(root_key, serial_number: 1) }
+        let(:other_root_certificate) { create_root_certificate(create_rsa_key, serial_number: 1) }
+
+        context "and the issuing root comes first in the list" do
+          let(:trusted_certificates) { [root_certificate, other_root_certificate] }
+
+          it "returns true" do
+            expect(key_attestation).to be_valid
+          end
+        end
+
+        context "and the issuing root comes last in the list" do
+          let(:trusted_certificates) { [other_root_certificate, root_certificate] }
+
+          it "returns true" do
+            expect(key_attestation).to be_valid
+          end
+        end
+      end
+
+      context "and they are the same certificate" do
+        let(:trusted_certificates) { [root_certificate, OpenSSL::X509::Certificate.new(root_certificate.to_der)] }
+
+        it "returns true" do
+          expect(key_attestation).to be_valid
+        end
+      end
+    end
+
     context "when RSA PSS algorithm" do
       before do
         unless OpenSSL::PKey::RSA.instance_methods.include?(:verify_pss)
